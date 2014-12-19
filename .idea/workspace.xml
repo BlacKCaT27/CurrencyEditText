@@ -1155,7 +1155,11 @@
       <created>1419009613662</created>
       <updated>1419009613662</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Adding gitignore">
+      <created>1419009716371</created>
+      <updated>1419009716371</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
