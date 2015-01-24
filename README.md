@@ -13,7 +13,7 @@ Using The Module
 
 Using the module is not much different from using any other EditText view. Simply define the view in your XML layout:
 
-        <com.blackcat.currencyeditText.CurrencyEditText
+        <com.blackcat.currencyedittext.CurrencyEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -32,7 +32,7 @@ or in code.
 
 If you'd like to disable the default hint entirely, simply set the DefaultHint attribute in your XML layout to false:
 
-        <com.blackcat.currencytextbox.CurrencyEditText
+        <com.blackcat.currencyedittext.CurrencyEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             CurrencyTextBox:enable_default_hint="false"
