@@ -41,12 +41,12 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
-     * Retrieve the raw value that was input by the user.
+     * Retrieve the raw value that was input by the user in their currencies lowest denomination (e.g. pennies).
      *
      * IMPORTANT: Remember that the location of the decimal varies by currency/Locale. This method
-     *  returns the raw given value, and cannot account for locality of the user. It is up to the
+     *  returns the raw given value, and does not account for locality of the user. It is up to the
      *  calling application to handle that level of conversion.
-     *  For example, if the text of the field is $13.37, this method will return an integer with a
+     *  For example, if the text of the field is $13.37, this method will return a long with a
      *  value of 1337, as penny is the lowest denomination for USD. It will be up to the calling
      *  application to know that it needs to handle this value as pennies and not some other denomination.
      *
