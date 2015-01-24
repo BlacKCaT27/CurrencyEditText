@@ -27,7 +27,7 @@ Attributes
 By default, CurrencyEditText provides a 'hint' value for the text box. This default value is the Currency Code symbol for the users given Locale setting. This is 
 useful for debugging purposes, as well as provides clean and easy to understand guidance to the user. 
 
-If you'd prefer to set your own hint text, simply set the hint the same was you would for any other EditText field. You can do this either in your XML layout
+If you'd prefer to set your own hint text, simply set the hint the same way you would for any other EditText field. You can do this either in your XML layout
 or in code.
 
 If you'd like to disable the default hint entirely, simply set the DefaultHint attribute in your XML layout to false:
