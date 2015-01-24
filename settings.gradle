@@ -1,1 +1,1 @@
-include ':currencyedittext'
+include ':currencyedittext', ':currencyedittexttester'
