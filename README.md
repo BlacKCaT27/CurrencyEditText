@@ -13,7 +13,7 @@ Using The Module
 
 Using the module is not much different from using any other EditText view. Simply define the view in your XML layout:
 
-        <com.blackcat.currencytextbox.CurrencyEditText
+        <com.blackcat.currencyeditText.CurrencyEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -51,8 +51,8 @@ As CurrencyEditText is an extension of the EditText class, it contains all the s
 
 To retrieve the fully formatted String value as shown to the user, simply call your CurrencyEditText objects getText() method.
 
-However, you'll likely need to actually do something useful with the users input. To help developers more easily retrieve this information, CurrencyEditText provides a getRawValue() method. This method provides back the raw numeric values as they were input by the user, and should be treated as if it were a whole value of the users local currency.
-For example, if the text of the field is $13.37, this method will return an integer with a value of 1337, as penny is the lowest denomination for USD. 
+However, you'll likely need to actually do something useful with the users input. To help developers more easily retrieve this information, CurrencyEditText provides the getRawValue() method. This method provides back the raw numeric values as they were input by the user, and should be treated as if it were a whole value of the users local currency.
+For example, if the text of the field is $13.37, this method will return a Long with a value of 1337, as penny is the lowest denomination for USD. 
 
 It is the responsibility of the calling application to handle this value appropriately. Keep in mind that dividing this number to convert it to some other denomination
  could possibly result in floating point rounding errors, and should be done with great caution. 
