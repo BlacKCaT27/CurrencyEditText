@@ -15,7 +15,7 @@ public class CurrencyEditText extends EditText {
 
     private Locale mLocale = getResources().getConfiguration().locale;
     private boolean mDefaultHintEnabled = true;
-    private int mValueInLowestDenom = 0;
+    private long mValueInLowestDenom = 0L;
 
     /*
     PUBLIC METHODS
@@ -53,7 +53,7 @@ public class CurrencyEditText extends EditText {
      * @return The raw value that was input by the user, in the lowest denomination of that users
      *  locale.
      */
-    public int getRawValue() {
+    public long getRawValue() {
         return mValueInLowestDenom;
     }
 
@@ -67,7 +67,7 @@ public class CurrencyEditText extends EditText {
         return mLocale;
     }
 
-    protected void setValueInLowestDenom(int mValueInLowestDenom) {
+    protected void setValueInLowestDenom(Long mValueInLowestDenom) {
         this.mValueInLowestDenom = mValueInLowestDenom;
     }
 
