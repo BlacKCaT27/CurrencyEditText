@@ -11,8 +11,12 @@ If you find that a certain currency is causing issues, please open an Issue in t
 Getting Started
 ================
 
-Getting started is easy. Just add the library as a dependency in your projects build.gradle file:
+Getting started is easy. Just add the library as a dependency in your projects build.gradle file. Be sure you've listed mavenCentral as a repository:
 
+        repositories{
+            mavenCentral()
+        }
+        
         dependencies{
             compile 'com.github.blackcat27:library:1.0.0-SNAPSHOT'
         }
