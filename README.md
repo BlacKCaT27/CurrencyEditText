@@ -46,20 +46,14 @@ In its default state, CurrencyEditText view appears as an EditText box with the 
 
 As a user enters additional values, they will appear starting with the right-most digit, pushing older digit entries left as they type.
 
-<<<<<<< Temporary merge branch 1
-![Entered Text](/../screenshots/screenshots/"CurrencyEditText show formatting.PNG"?raw=true)
-=======
-![Entered Text](/../screenshots/screenshots/'CurrencyEditText show formatting.PNG'?raw=true)
->>>>>>> Temporary merge branch 2
+![Entered Text](/../screenshots/screenshots/CurrencyEditText_show_formatting.PNG?raw=true)
+
 
 Depending on the users Locale and Language settings, the displayed text will automatically be formatted to the users local standard. For example, when the users selects
   "German", the Euro symbol appears on the right, as seen below.
-  
-<<<<<<< Temporary merge branch 1
-![Entered Text](/../screenshots/screenshots/"CurrencyEditText show formatting in german.PNG"?raw=true)
-=======
-![Entered Text](/../screenshots/screenshots/'CurrencyEditText show formatting in german.PNG'?raw=true)
->>>>>>> Temporary merge branch 2
+
+![Entered Text](/../screenshots/screenshots/CurrencyEditText_show_formatting_in_german.PNG?raw=true)
+
 
 Attributes
 ===============
