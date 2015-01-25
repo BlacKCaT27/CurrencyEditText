@@ -36,6 +36,22 @@ Using the module is not much different from using any other EditText view. Simpl
 You're done! The CurrencyEditText module handles all the string manipulation and input monitoring required to allow for a clean, easy-to-use
 currency entry system.
 
+In Action
+===============
+
+In its default state, CurrencyEditText view appears as an EditText box with the hint set to the users local currency symbol.
+
+![Default State](/../screenshots/screenshots/CurrencyEditText.PNG?raw=true)
+
+As a user enters additional values, they will appear starting with the right-most digit, pushing older digit entries left as they type.
+
+![Entered Text](/../screenshots/screenshots/"CurrencyEditText show formatting.PNG"?raw=true)
+
+Depending on the users Locale and Language settings, the displayed text will automatically be formatted to the users local standard. For example, when the users selects
+  "German", the Euro symbol appears on the right, as seen below.
+  
+![Entered Text](/../screenshots/screenshots/"CurrencyEditText show formatting in german.PNG"?raw=true)
+
 Attributes
 ===============
 
