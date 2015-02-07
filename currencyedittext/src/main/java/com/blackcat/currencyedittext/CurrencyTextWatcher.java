@@ -64,6 +64,7 @@ class CurrencyTextWatcher implements TextWatcher {
 
         //Use the mIgnoreIteration flag to stop our edits to the text field from triggering an endlessly recursive call to afterTextChanged
         if(!mIgnoreIteration){
+            mIgnoreIteration = true;
             //Start by converting the editable to something easier to work with, then remove all non-digit characters
             String newText = editable.toString();
             newText = newText.replaceAll("[^0-9]", "");
@@ -85,7 +86,7 @@ class CurrencyTextWatcher implements TextWatcher {
                 newTextValue = newTextValue / CURRENCY_DECIMAL_DIVISOR;
                 String formattedAmount = mCurrencyFormatter.format(newTextValue);
 
-                mIgnoreIteration = true;
+                
                 mEditText.setText(formattedAmount);
 
                 //Track the last known good input so if there are any issues with new input, we can fall back gracefully.
