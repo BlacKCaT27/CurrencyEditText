@@ -18,7 +18,7 @@ Getting started is easy. Just add the library as a dependency in your projects b
         }
         
         dependencies{
-            compile 'com.github.blackcat27:library:1.0.0-SNAPSHOT'
+            compile 'com.github.blackcat27:library:1.0.1-SNAPSHOT'
         }
         
         
