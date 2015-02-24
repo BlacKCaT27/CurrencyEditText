@@ -18,7 +18,7 @@ Getting started is easy. Just add the library as a dependency in your projects b
         }
         
         dependencies{
-            compile 'com.github.blackcat27:library:1.0.1-SNAPSHOT'
+            compile 'com.github.blackcat27:library:1.0.2-SNAPSHOT'
         }
         
         
@@ -95,6 +95,24 @@ To help developers better facilitate the need to properly handle locale differen
 
 This method is really just a convenience method for retrieving information about a users locale. It is functionally equivalent to pulling the locale from the users configuration on their device. It is recommended 
 that developers take a look at what the Locale and Currency classes offer in terms of denominations, decimal placement, string formatting, etc. 
+
+
+Formatting Values
+=================
+
+If you'd like to retrieve a formatted version of a raw value you previously accepted from a user, use the formatCurrency() method of CurrencyEditText. It takes one parameter: a string representing the value you'd
+like to have formatted. It is expected that this value will be in the same format as the returning value from the getRawValue() method. For example:
+
+        //rawVal contains "1000"
+        CurrencyEditText cet = new CurrencyEditText();
+    
+        ... user inputs "$10.00"
+    
+        //rawVal is 1000
+        Long rawVal = cet.getRawValue();
+    
+        //formattedVal accepts "1000" and returns "$10.00"
+        String formattedVal = cet.formatCurrency(Long.toString(rawVal));
 
 
 Why doesn't CurrencyEditText do \<x\>?

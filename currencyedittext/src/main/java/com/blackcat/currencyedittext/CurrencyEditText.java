@@ -14,6 +14,8 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale mLocale = getResources().getConfiguration().locale;
+    private CurrencyTextWatcher ctw;
+    
     private boolean mDefaultHintEnabled = true;
     private long mValueInLowestDenom = 0L;
 
@@ -25,7 +27,9 @@ public class CurrencyEditText extends EditText {
         processAttributes(context, attrs);
 
         this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        this.addTextChangedListener(new CurrencyTextWatcher(this));
+        
+        ctw = new CurrencyTextWatcher(this);
+        this.addTextChangedListener(ctw);
     }
 
     public void setDefaultHintEnabled(boolean useDefaultHint) {
@@ -66,6 +70,19 @@ public class CurrencyEditText extends EditText {
     public Locale getLocale() {
         return mLocale;
     }
+
+    /**
+     * Pass in a value to have it formatted using the same rules used during data entry. 
+     * @param val A string which represents the value you'd like formatted. It is expected that this string will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as 
+     *            "1000" to represent "$10.00"). Note that format currency will take in ANY string, and will first strip any non-digit characters before working on that string. If the result of that processing
+     *            reveals an empty string, or a string whose number of digits is greater than the max number of digits, an exception will be thrown.
+     * @return A locale-formatted string of the passed in value, represented as currency.
+     */
+    public String formatCurrency(String val){
+        return ctw.formatCurrency(val);
+    }
+    
+    
 
     protected void setValueInLowestDenom(Long mValueInLowestDenom) {
         this.mValueInLowestDenom = mValueInLowestDenom;
