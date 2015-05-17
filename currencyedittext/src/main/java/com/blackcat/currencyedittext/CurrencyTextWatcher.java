@@ -57,7 +57,7 @@ class CurrencyTextWatcher implements TextWatcher {
     /**
      * After each letter is typed, this method will take in the current text, process it, and take the resulting
      * formatted string and place it back in the EditText box the TextWatcher is applied to
-     * @param editable
+     * @param editable text to be transformed
      */
     @Override
     public void afterTextChanged(Editable editable) {
