@@ -68,8 +68,13 @@ class CurrencyTextWatcher implements TextWatcher {
             //Start by converting the editable to something easier to work with, then remove all non-digit characters
             String newText = editable.toString();
             String textToDisplay;
+            newText = newText.replaceAll("[^0-9]", "");
+            if(!newText.equals("") && newText.length() < MAX_RAW_INPUT_LENGTH){
+                //Store a copy of the raw input to be retrieved later by getRawValue
+                mEditText.setValueInLowestDenom(Long.valueOf(newText));
+            }
             try{
-                textToDisplay = formatCurrency(newText);
+                textToDisplay = CurrencyTextFormatter.formatText(newText, mLocale);
             }
             catch(IllegalArgumentException exception){
                 textToDisplay = mLastGoodInput;
@@ -101,8 +106,7 @@ class CurrencyTextWatcher implements TextWatcher {
             //Convert the string into a double, which will later be passed into the currency formatter
             double newTextValue = Double.valueOf(val);
 
-            //Store a copy of the raw input to be retrieved later by getRawValue
-            mEditText.setValueInLowestDenom(Long.valueOf(val));
+
 
             /** Despite having a formatter, we actually need to place the decimal ourselves.
              * IMPORTANT: This double division does have a small potential to introduce rounding errors (though the likelihood is very small for two digits)
