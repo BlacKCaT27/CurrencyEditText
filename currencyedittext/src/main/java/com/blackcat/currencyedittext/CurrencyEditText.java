@@ -79,7 +79,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return ctw.formatCurrency(val);
+        return CurrencyTextFormatter.formatText(val, mLocale);
     }
     
     

@@ -18,7 +18,7 @@ Getting started is easy. Just add the library as a dependency in your projects b
         }
         
         dependencies{
-            compile 'com.github.blackcat27:library:1.1.2-SNAPSHOT'
+            compile 'com.github.blackcat27:library:1.2.0-SNAPSHOT'
         }
         
         
@@ -113,6 +113,8 @@ like to have formatted. It is expected that this value will be in the same forma
     
         //formattedVal accepts "1000" and returns "$10.00"
         String formattedVal = cet.formatCurrency(Long.toString(rawVal));
+        
+If you'd rather
 
 
 Why doesn't CurrencyEditText do \<x\>?
