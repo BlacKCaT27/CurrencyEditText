@@ -18,10 +18,19 @@ Getting started is easy. Just add the library as a dependency in your projects b
         }
         
         dependencies{
-            compile 'com.github.blackcat27:library:1.2.0-SNAPSHOT'
+            compile 'com.github.blackcat27:library:1.2.3-SNAPSHOT'
         }
         
         
+Alternatively, if you're having issues with mavenCentral, try Jitpack:
+
+        repositories{
+            maven { url "https://jitpack.io" }
+        }
+        
+        dependencies {
+            compile 'com.github.BlacKCaT27:CurrencyEditText:v1.2.3'
+        }
 
 
 Using The Module
