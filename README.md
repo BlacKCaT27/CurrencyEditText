@@ -54,7 +54,7 @@ currency entry system.
 In Action
 ===============
 
-In its default state, CurrencyEditText view appears as an EditText box with the hint set to the users local currency symbol.
+In its default state, `CurrencyEditText` view appears as an `EditText` box with the hint set to the users local currency symbol.
 
 ![Default State](/../screenshots/screenshots/CurrencyEditText.PNG?raw=true)
 
@@ -133,7 +133,6 @@ Long rawVal = cet.getRawValue();
 String formattedVal = cet.formatCurrency(Long.toString(rawVal));
 ```
         
-If you'd rather
 
 Why doesn't CurrencyEditText do \<x\>?
 ====================================
