@@ -19,8 +19,6 @@ public class CurrencyEditText extends EditText {
     private boolean allowNegativeValues = false;
     private long valueInLowestDenom = 0L;
 
-    private CurrencyTextWatcher currencyTextWatcher;
-
     /*
     PUBLIC METHODS
      */
@@ -30,7 +28,7 @@ public class CurrencyEditText extends EditText {
 
         this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
 
-        currencyTextWatcher = new CurrencyTextWatcher(this);
+        CurrencyTextWatcher currencyTextWatcher = new CurrencyTextWatcher(this);
         this.addTextChangedListener(currencyTextWatcher);
     }
 
