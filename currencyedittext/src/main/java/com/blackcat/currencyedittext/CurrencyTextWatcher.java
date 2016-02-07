@@ -5,26 +5,24 @@ import android.text.TextWatcher;
 
 import java.text.DecimalFormat;
 import java.util.Currency;
-import java.util.Locale;
 
-
+@SuppressWarnings("unused")
 class CurrencyTextWatcher implements TextWatcher {
 
-    Locale mLocale;
-    private CurrencyEditText mEditText;
-    boolean mIgnoreIteration;
+    private CurrencyEditText editText;
 
-    DecimalFormat mCurrencyFormatter;
+    private boolean ignoreIteration;
+    private String lastGoodInput;
+    private DecimalFormat currencyFormatter;
+
 
     final double CURRENCY_DECIMAL_DIVISOR;
-
-
     final int CURSOR_SPACING_COMPENSATION = 2;
 
     //Setting a max length because after this length, java represents doubles in scientific notation which breaks the formatter
     final int MAX_RAW_INPUT_LENGTH = 15;
 
-    String mLastGoodInput;
+
 
     /**
      * A specialized TextWatcher designed specifically for converting EditText values to a pretty-print string currency value.
@@ -32,25 +30,14 @@ class CurrencyTextWatcher implements TextWatcher {
      *                Used for replacing user-entered text with formatted text as well as handling cursor position for inputting monetary values
      */
     public CurrencyTextWatcher(CurrencyEditText textBox){
-        mEditText = textBox;
-        mLocale = textBox.getLocale();
-        mLastGoodInput = "";
-        mIgnoreIteration = false;
+        editText = textBox;
+        lastGoodInput = "";
+        ignoreIteration = false;
 
-        mCurrencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(mLocale);
+        currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(editText.getLocale());
 
         //Different countries use different fractional values for denominations (0.999 <x> vs. 0.99 cents), therefore this must be defined at runtime
-        CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(mLocale).getDefaultFractionDigits());
-
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(editText.getLocale()).getDefaultFractionDigits());
 
     }
 
@@ -61,52 +48,56 @@ class CurrencyTextWatcher implements TextWatcher {
      */
     @Override
     public void afterTextChanged(Editable editable) {
-
-        //Use the mIgnoreIteration flag to stop our edits to the text field from triggering an endlessly recursive call to afterTextChanged
-        if(!mIgnoreIteration){
-            mIgnoreIteration = true;
+        //todo checkin and publish negative number support
+        //Use the ignoreIteration flag to stop our edits to the text field from triggering an endlessly recursive call to afterTextChanged
+        if(!ignoreIteration){
+            ignoreIteration = true;
             //Start by converting the editable to something easier to work with, then remove all non-digit characters
             String newText = editable.toString();
             String textToDisplay;
-            newText = newText.replaceAll("[^0-9]", "");
-            if(!newText.equals("") && newText.length() < MAX_RAW_INPUT_LENGTH){
+
+            newText = (editText.areNegativeValuesAllowed()) ? newText.replaceAll("[^0-9/-]", "") : newText.replaceAll("[^0-9]", "");
+            if(!newText.equals("") && newText.length() < MAX_RAW_INPUT_LENGTH && !newText.equals("-")){
                 //Store a copy of the raw input to be retrieved later by getRawValue
-                mEditText.setValueInLowestDenom(Long.valueOf(newText));
+                editText.setValueInLowestDenom(Long.valueOf(newText));
             }
             try{
-                textToDisplay = CurrencyTextFormatter.formatText(newText, mLocale);
+                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getLocale());
             }
             catch(IllegalArgumentException exception){
-                textToDisplay = mLastGoodInput;
+                textToDisplay = lastGoodInput;
             }
 
-            mEditText.setText(textToDisplay);
+            editText.setText(textToDisplay);
             //Store the last known good input so if there are any issues with new input later, we can fall back gracefully.
-            mLastGoodInput = textToDisplay;
+            lastGoodInput = textToDisplay;
 
             //locate the position to move the cursor to. The CURSOR_SPACING_COMPENSATION constant is to account for locales where the Euro is displayed as " €" (2 characters).
             //A more robust cursor strategy will be implemented at a later date.
-            int cursorPosition = mEditText.getText().length();
+            int cursorPosition = editText.getText().length();
             if(textToDisplay.length() > 0 && Character.isDigit(textToDisplay.charAt(0))) cursorPosition -= CURSOR_SPACING_COMPENSATION;
 
             //Move the cursor to the end of the numerical value to enter the next number in a right-to-left fashion, like you would on a calculator.
-            mEditText.setSelection(cursorPosition);
+            editText.setSelection(cursorPosition);
 
         }
         else{
-            mIgnoreIteration = false;
+            ignoreIteration = false;
         }
     }
 
+    /**
+     * @deprecated This protected method has been replaced with CurrencyTextFormatter.formatText(val, locale). This method will be removed in a future version. It
+     * is no longer being maintained as of 2/6/2016.
+     */
+    @Deprecated
     public String formatCurrency(String val){
         String formattedAmount;
-        val = val.replaceAll("[^0-9]", "");
+        val = (editText.areNegativeValuesAllowed()) ? "" : val.replaceAll("[^0-9]", "");
         //if there's nothing left, that means we were handed an empty string. Also, cap the raw input so the formatter doesn't break.
         if(!val.equals("") && val.length() < MAX_RAW_INPUT_LENGTH) {
             //Convert the string into a double, which will later be passed into the currency formatter
             double newTextValue = Double.valueOf(val);
-
-
 
             /** Despite having a formatter, we actually need to place the decimal ourselves.
              * IMPORTANT: This double division does have a small potential to introduce rounding errors (though the likelihood is very small for two digits)
@@ -114,7 +105,7 @@ class CurrencyTextWatcher implements TextWatcher {
              * the actual number input by the user. See CurrencyEditText.getRawValue() for more information.
              */
             newTextValue = newTextValue / CURRENCY_DECIMAL_DIVISOR;
-            formattedAmount = mCurrencyFormatter.format(newTextValue);
+            formattedAmount = currencyFormatter.format(newTextValue);
         }
         else {
             throw new IllegalArgumentException("Invalid amount of digits found (either zero or too many) in argument val");
@@ -122,4 +113,8 @@ class CurrencyTextWatcher implements TextWatcher {
         return formattedAmount;
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {}
 }

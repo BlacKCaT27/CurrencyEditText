@@ -10,14 +10,16 @@ import android.widget.EditText;
 import java.util.Currency;
 import java.util.Locale;
 
-
+@SuppressWarnings("unused")
 public class CurrencyEditText extends EditText {
 
-    private Locale mLocale = getResources().getConfiguration().locale;
-    private CurrencyTextWatcher ctw;
-    
-    private boolean mDefaultHintEnabled = true;
-    private long mValueInLowestDenom = 0L;
+    private Locale locale = getResources().getConfiguration().locale;
+
+    private boolean defaultHintEnabled = true;
+    private boolean allowNegativeValues = false;
+    private long valueInLowestDenom = 0L;
+
+    private CurrencyTextWatcher currencyTextWatcher;
 
     /*
     PUBLIC METHODS
@@ -26,14 +28,18 @@ public class CurrencyEditText extends EditText {
         super(context, attrs);
         processAttributes(context, attrs);
 
-        this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        
-        ctw = new CurrencyTextWatcher(this);
-        this.addTextChangedListener(ctw);
+        this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+        currencyTextWatcher = new CurrencyTextWatcher(this);
+        this.addTextChangedListener(currencyTextWatcher);
     }
 
+    /**
+     * Sets whether or or not the Default Hint (users local currency symbol) will be shown in the textbox when no value has yet been entered.
+     * @param useDefaultHint - true to enable default hint, false to disable
+     */
     public void setDefaultHintEnabled(boolean useDefaultHint) {
-        this.mDefaultHintEnabled = useDefaultHint;
+        this.defaultHintEnabled = useDefaultHint;
     }
 
     /**
@@ -41,7 +47,21 @@ public class CurrencyEditText extends EditText {
      * @return true if the default hint is enabled, false if it is not.
      */
     public boolean getDefaultHintEnabled(){
-        return this.mDefaultHintEnabled;
+        return this.defaultHintEnabled;
+    }
+
+    /**
+     * Enable the user to input negative values
+     */
+    public void setAllowNegativeValues(boolean negativeValuesAllowed){
+        allowNegativeValues = negativeValuesAllowed;
+    }
+
+    /**
+     * Returns whether or not negative values have been allowed for this CurrencyEditText field
+     */
+    public boolean areNegativeValuesAllowed(){
+        return allowNegativeValues;
     }
 
     /**
@@ -58,7 +78,7 @@ public class CurrencyEditText extends EditText {
      *  locale.
      */
     public long getRawValue() {
-        return mValueInLowestDenom;
+        return valueInLowestDenom;
     }
 
     /**
@@ -68,25 +88,34 @@ public class CurrencyEditText extends EditText {
      * @return the Locale object for the given users configuration
      */
     public Locale getLocale() {
-        return mLocale;
+        return locale;
     }
 
     /**
      * Pass in a value to have it formatted using the same rules used during data entry. 
      * @param val A string which represents the value you'd like formatted. It is expected that this string will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as 
-     *            "1000" to represent "$10.00"). Note that format currency will take in ANY string, and will first strip any non-digit characters before working on that string. If the result of that processing
+     *            "1000" to represent "$10.00"). Note that formatCuurrency will take in ANY string, and will first strip any non-digit characters before working on that string. If the result of that processing
      *            reveals an empty string, or a string whose number of digits is greater than the max number of digits, an exception will be thrown.
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, mLocale);
+        return CurrencyTextFormatter.formatText(val, locale);
     }
-    
-    
+
+    /**
+     * Pass in a value to have it formatted using the same rules used during data entry.
+     * @param rawVal A long which represents the value you'd like formatted. It is expected that this value will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as
+     *            "1000" to represent "$10.00").
+     * @return A locale-formatted string of the passed in value, represented as currency.
+     */
+    public String formatCurrency(long rawVal){
+        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), locale);
+    }
 
     protected void setValueInLowestDenom(Long mValueInLowestDenom) {
-        this.mValueInLowestDenom = mValueInLowestDenom;
+        this.valueInLowestDenom = mValueInLowestDenom;
     }
+
 
     /*
     PRIVATE HELPER METHODS
@@ -96,13 +125,17 @@ public class CurrencyEditText extends EditText {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CurrencyEditText);
 
         boolean defaultHintAttr = array.getBoolean(R.styleable.CurrencyEditText_enable_default_hint, true);
-        this.setDefaultHintEnabled(defaultHintAttr);
-        configureHint();
+        configureHint(defaultHintAttr);
+
+        this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
 
         array.recycle();
     }
 
-    private void configureHint(){
+    private void configureHint(boolean defaultHintEnabled){
+
+        this.setDefaultHintEnabled(defaultHintEnabled);
+
         //Check to see if a hint has been set by the calling application. If not, fall back to the default hint if it's enabled.
         CharSequence hintText = this.getHint();
         if(hintText == null){
