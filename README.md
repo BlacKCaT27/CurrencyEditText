@@ -95,6 +95,25 @@ CurrencyEditText tb = (CurrencyEditText) findViewById(R.id.test);
 tb.setDefaultHintEnabled(false);
 ```
 
+
+
+Additionally, you can enable the input of negative numbers by setting the allow_negative_values attribute.
+
+```xml
+<com.blackcat.currencyedittext.CurrencyEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:allow_negative_values="true"
+    />
+```
+
+From java:
+
+```java
+CurrencyEditText tb = (CurrencyEditText) findViewById(R.id.test);
+tb.setAllowNegativeValues(true);
+```
+
 Retrieving and Handling Input
 =============================
 
@@ -131,6 +150,10 @@ Long rawVal = cet.getRawValue();
 
 //formattedVal accepts "1000" and returns "$10.00"
 String formattedVal = cet.formatCurrency(Long.toString(rawVal));
+
+//or
+
+String formattedVal = cet.formatCurrency(rawVal);
 ```
         
 
