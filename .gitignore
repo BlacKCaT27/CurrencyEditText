@@ -29,5 +29,6 @@ proguard/
 
 /.idea/
 
-currencyedittexttester
+*.iml
+
 settings.gradle
