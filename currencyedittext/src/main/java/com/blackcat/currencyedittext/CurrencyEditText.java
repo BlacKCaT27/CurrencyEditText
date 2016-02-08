@@ -90,6 +90,18 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
+     * Override the default locale used by CurrencyEditText (which is the users device locale).
+     * WARNING: If this method is used to set the locale to one not supported by ISO 3166,
+     * formatting the text will throw an exception. Also keep in mind that calling this method
+     * will set the hint based on the specified locale, which will override any previous hint value.
+     * @param locale The locale to set the CurrencyEditText box to adhere to.
+     */
+    public void setLocale(Locale locale){
+        this.locale = locale;
+        configureHint();
+    }
+
+    /**
      * Pass in a value to have it formatted using the same rules used during data entry. 
      * @param val A string which represents the value you'd like formatted. It is expected that this string will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as 
      *            "1000" to represent "$10.00"). Note that formatCuurrency will take in ANY string, and will first strip any non-digit characters before working on that string. If the result of that processing
@@ -122,27 +134,21 @@ public class CurrencyEditText extends EditText {
     private void processAttributes(Context context, AttributeSet attrs){
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CurrencyEditText);
 
-        boolean defaultHintAttr = array.getBoolean(R.styleable.CurrencyEditText_enable_default_hint, true);
-        configureHint(defaultHintAttr);
+        defaultHintEnabled = array.getBoolean(R.styleable.CurrencyEditText_enable_default_hint, true);
+        configureHint();
 
         this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
 
         array.recycle();
     }
 
-    private void configureHint(boolean defaultHintEnabled){
-
+    private void configureHint(){
         this.setDefaultHintEnabled(defaultHintEnabled);
-
-        //Check to see if a hint has been set by the calling application. If not, fall back to the default hint if it's enabled.
-        CharSequence hintText = this.getHint();
-        if(hintText == null){
-            if(getDefaultHintEnabled()){
-                this.setHint(Currency.getInstance(getResources().getConfiguration().locale).getSymbol());
-            }
-            else{
-                Log.i(this.getClass().getSimpleName(), "configureHint: Default Hint disabled; ignoring request.");
-            }
+        if(getDefaultHintEnabled()){
+            this.setHint(Currency.getInstance(locale).getSymbol());
+        }
+        else{
+            Log.i(this.getClass().getSimpleName(), "configureHint: Default Hint disabled; ignoring request.");
         }
     }
 }

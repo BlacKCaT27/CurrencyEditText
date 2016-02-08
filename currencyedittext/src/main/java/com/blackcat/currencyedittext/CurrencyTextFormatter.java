@@ -19,7 +19,6 @@ public final class CurrencyTextFormatter {
         //special case for the start of a negative number
         if(val.equals("-")) return val;
 
-
         final double CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(locale).getDefaultFractionDigits());
         DecimalFormat currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(locale);
 
