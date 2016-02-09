@@ -48,7 +48,6 @@ class CurrencyTextWatcher implements TextWatcher {
      */
     @Override
     public void afterTextChanged(Editable editable) {
-        //todo checkin and publish negative number support
         //Use the ignoreIteration flag to stop our edits to the text field from triggering an endlessly recursive call to afterTextChanged
         if(!ignoreIteration){
             ignoreIteration = true;
