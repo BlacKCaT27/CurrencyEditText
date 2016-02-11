@@ -100,6 +100,7 @@ public class CurrencyEditText extends EditText {
      */
     public void setLocale(Locale locale) {
         this.locale = locale;
+        this.currency = Currency.getInstance(locale);
         updateHint();
     }
 
