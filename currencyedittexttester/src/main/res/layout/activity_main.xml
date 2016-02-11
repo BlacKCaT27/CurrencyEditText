@@ -17,7 +17,16 @@
         app:allow_negative_values="true"
         android:id="@+id/cet"
         />
-    
+
+    <com.blackcat.currencyedittext.CurrencyEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:allow_negative_values="true"
+        android:id="@+id/cet_for_testing"
+        android:hint="TestHint"
+        android:visibility="invisible"
+        />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

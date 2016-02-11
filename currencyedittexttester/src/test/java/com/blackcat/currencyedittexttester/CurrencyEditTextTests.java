@@ -24,33 +24,33 @@ public class CurrencyEditTextTests {
     private CurrencyEditText currencyEditText;
 
     @Before
-    public void setup(){
+    public void setup() {
         mainActivity = Robolectric.setupActivity(MainActivity.class);
         currencyEditText = (CurrencyEditText) mainActivity.findViewById(R.id.cet);
     }
 
     @Test
-    public void EnteringValidPositiveStringShouldGiveValidRawValueTest(){
+    public void EnteringValidPositiveStringShouldGiveValidRawValueTest() {
         currencyEditText.setText("$1,000");
         long result = currencyEditText.getRawValue();
         Assert.assertEquals(1000, result);
     }
 
     @Test
-    public void EnteringValidNegativeStringShouldGiveValidRawValueTest(){
+    public void EnteringValidNegativeStringShouldGiveValidRawValueTest() {
         currencyEditText.setText("-$1,000");
         long result = currencyEditText.getRawValue();
         Assert.assertEquals(-1000, result);
     }
 
     @Test
-    public void FormatUSDCurrencyWithValidLongParametersTest(){
+    public void FormatUSDCurrencyWithValidLongParametersTest() {
         String result = currencyEditText.formatCurrency(100000);
         Assert.assertEquals("$1,000.00", result);
     }
 
     @Test
-    public void FormatGPBCurrencyWithValidLongParametersTest(){
+    public void FormatGPBCurrencyWithValidLongParametersTest() {
         Locale gbLocale = Locale.UK;
         currencyEditText.setLocale(gbLocale);
         String hint = currencyEditText.getHint().toString();
@@ -60,13 +60,29 @@ public class CurrencyEditTextTests {
     }
 
     @Test
-    public void FormatEuroCurrencyWithValidLongParametersTest(){
+    public void FormatEuroCurrencyWithValidLongParametersTest() {
         Locale euroLocale = Locale.FRANCE;
         currencyEditText.setLocale(euroLocale);
         String hint = currencyEditText.getHint().toString();
         Assert.assertEquals("EUR", hint);
         String result = currencyEditText.formatCurrency(100000);
         String expectedResult = "1 000,00 €";
-        Assert.assertEquals(expectedResult, result.replace('\u00A0',' '));
+        Assert.assertEquals(expectedResult, result.replace('\u00A0', ' '));
+    }
+
+    @Test
+    public void SetHintAndVerifyDefaultHintIsOverriddenTest() {
+        String defaultHint = currencyEditText.getHint().toString();
+        Assert.assertEquals("$", defaultHint);
+
+        currencyEditText.setHint("Test");
+        Assert.assertEquals("Test", currencyEditText.getHint().toString());
+    }
+
+    @Test
+    public void SetHintInXMLAndVerifyDefaultHintIsOverriddenTest() {
+        CurrencyEditText cet = (CurrencyEditText) mainActivity.findViewById(R.id.cet_for_testing);
+        String hint = cet.getHint().toString();
+        Assert.assertEquals("TestHint", hint);
     }
 }

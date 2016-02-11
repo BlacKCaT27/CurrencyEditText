@@ -19,6 +19,7 @@ public class CurrencyEditText extends EditText {
     private boolean allowNegativeValues = false;
     private long valueInLowestDenom = 0L;
 
+    private String hintCache = null;
     /*
     PUBLIC METHODS
      */
@@ -98,7 +99,15 @@ public class CurrencyEditText extends EditText {
      */
     public void setLocale(Locale locale){
         this.locale = locale;
-        configureHint();
+
+        if(hintCache != null){
+            setHint(hintCache);
+        }
+        else{
+            if(defaultHintEnabled){
+                setHint(getDefaultHintValue());
+            }
+        }
     }
 
     /**
@@ -134,21 +143,38 @@ public class CurrencyEditText extends EditText {
     private void processAttributes(Context context, AttributeSet attrs){
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CurrencyEditText);
 
-        defaultHintEnabled = array.getBoolean(R.styleable.CurrencyEditText_enable_default_hint, true);
-        configureHint();
+        boolean defaultHintAttrVal = array.getBoolean(R.styleable.CurrencyEditText_enable_default_hint, true);
+        configureHint(defaultHintAttrVal);
 
         this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
 
         array.recycle();
     }
 
-    private void configureHint(){
-        this.setDefaultHintEnabled(defaultHintEnabled);
-        if(getDefaultHintEnabled()){
-            this.setHint(Currency.getInstance(locale).getSymbol());
+    private void configureHint(boolean defaultHintAttrVal){
+
+        if(hintAlreadySet()){
+            this.setDefaultHintEnabled(false);
+            this.hintCache = getHint().toString();
+            return;
+        }
+        else{
+            this.setDefaultHintEnabled(defaultHintAttrVal);
+        }
+
+        if(getDefaultHintEnabled()) {
+            this.setHint(getDefaultHintValue());
         }
         else{
             Log.i(this.getClass().getSimpleName(), "configureHint: Default Hint disabled; ignoring request.");
         }
+    }
+
+    private boolean hintAlreadySet(){
+        return (this.getHint() != null && !this.getHint().equals(""));
+    }
+
+    private String getDefaultHintValue() {
+        return Currency.getInstance(locale).getSymbol();
     }
 }
