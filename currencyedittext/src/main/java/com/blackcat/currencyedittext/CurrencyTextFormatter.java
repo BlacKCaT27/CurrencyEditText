@@ -14,6 +14,10 @@ public final class CurrencyTextFormatter {
 
     private CurrencyTextFormatter(){}
 
+    public static String formatText(String val, Locale locale) {
+        return formatText(val, Currency.getInstance(locale), locale);
+    }
+
     public static String formatText(String val, Currency currency, Locale locale) {
 
         //special case for the start of a negative number
