@@ -4,7 +4,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import java.text.DecimalFormat;
-import java.util.Currency;
 
 @SuppressWarnings("unused")
 class CurrencyTextWatcher implements TextWatcher {

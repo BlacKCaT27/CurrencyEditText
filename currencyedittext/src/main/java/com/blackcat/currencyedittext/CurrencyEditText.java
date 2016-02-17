@@ -14,7 +14,14 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale locale = getResources().getConfiguration().locale;
-    private Currency currency = Currency.getInstance(locale);
+    private Currency currency;
+    {
+        try {
+            currency = Currency.getInstance(locale);
+        } catch (IllegalArgumentException e) {
+            currency = Currency.getInstance(Locale.US);
+        }
+    }
 
     private boolean defaultHintEnabled = true;
     private boolean allowNegativeValues = false;
