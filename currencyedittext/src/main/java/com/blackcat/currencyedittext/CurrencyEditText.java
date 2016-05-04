@@ -14,6 +14,14 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale locale = getResources().getConfiguration().locale;
+    private Currency currency;
+    {
+        try {
+            currency = Currency.getInstance(locale);
+        } catch (IllegalArgumentException e) {
+            currency = Currency.getInstance(Locale.US);
+        }
+    }
 
     private boolean defaultHintEnabled = true;
     private boolean allowNegativeValues = false;
@@ -97,9 +105,31 @@ public class CurrencyEditText extends EditText {
      * will set the hint based on the specified locale, which will override any previous hint value.
      * @param locale The locale to set the CurrencyEditText box to adhere to.
      */
-    public void setLocale(Locale locale){
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+        this.currency = Currency.getInstance(locale);
+        updateHint();
+    }
+
+    public void setCurrency(Currency currency, Locale locale) {
+        this.currency = currency;
         this.locale = locale;
 
+        updateHint();
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+
+        updateHint();
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+
+    private void updateHint() {
         if(hintCache != null){
             setHint(hintCache);
         }
@@ -118,7 +148,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, locale);
+        return CurrencyTextFormatter.formatText(val, currency, locale);
     }
 
     /**
@@ -128,7 +158,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(long rawVal){
-        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), locale);
+        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), currency, locale);
     }
 
     protected void setValueInLowestDenom(Long mValueInLowestDenom) {
@@ -175,6 +205,6 @@ public class CurrencyEditText extends EditText {
     }
 
     private String getDefaultHintValue() {
-        return Currency.getInstance(locale).getSymbol();
+        return currency.getSymbol();
     }
 }

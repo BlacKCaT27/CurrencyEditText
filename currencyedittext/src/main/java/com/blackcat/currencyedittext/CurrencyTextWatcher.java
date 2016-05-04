@@ -4,7 +4,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import java.text.DecimalFormat;
-import java.util.Currency;
 
 @SuppressWarnings("unused")
 class CurrencyTextWatcher implements TextWatcher {
@@ -37,7 +36,7 @@ class CurrencyTextWatcher implements TextWatcher {
         currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(editText.getLocale());
 
         //Different countries use different fractional values for denominations (0.999 <x> vs. 0.99 cents), therefore this must be defined at runtime
-        CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(editText.getLocale()).getDefaultFractionDigits());
+        CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, editText.getCurrency().getDefaultFractionDigits());
 
     }
 
@@ -61,7 +60,7 @@ class CurrencyTextWatcher implements TextWatcher {
                 editText.setValueInLowestDenom(Long.valueOf(newText));
             }
             try{
-                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getLocale());
+                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getCurrency(), editText.getLocale());
             }
             catch(IllegalArgumentException exception){
                 textToDisplay = lastGoodInput;

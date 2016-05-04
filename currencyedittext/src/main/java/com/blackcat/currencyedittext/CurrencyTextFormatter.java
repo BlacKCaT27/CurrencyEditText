@@ -14,13 +14,18 @@ public final class CurrencyTextFormatter {
 
     private CurrencyTextFormatter(){}
 
-    public static String formatText(String val, Locale locale){
+    public static String formatText(String val, Locale locale) {
+        return formatText(val, Currency.getInstance(locale), locale);
+    }
+
+    public static String formatText(String val, Currency currency, Locale locale) {
 
         //special case for the start of a negative number
         if(val.equals("-")) return val;
 
-        final double CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(locale).getDefaultFractionDigits());
+        final double CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, currency.getDefaultFractionDigits());
         DecimalFormat currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(locale);
+        currencyFormatter.setCurrency(currency);
 
         //if there's nothing left, that means we were handed an empty string. Also, cap the raw input so the formatter doesn't break.
         if(!val.equals("") && val.length() < MAX_RAW_INPUT_LENGTH && !val.equals("-")) {

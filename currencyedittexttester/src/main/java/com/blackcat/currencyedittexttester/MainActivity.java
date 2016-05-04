@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.blackcat.currencyedittext.CurrencyEditText;
 import com.blackcat.currencyedittext.CurrencyTextFormatter;
 
+import java.util.Currency;
 import java.util.Locale;
 import java.util.Random;
 
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
 
                 String result = "oops";
                 try{
-                    result = CurrencyTextFormatter.formatText(Long.toString(randNum), Locale.KOREA);
+                    result = CurrencyTextFormatter.formatText(Long.toString(randNum), Currency.getInstance(Locale.KOREA), Locale.KOREA);
                 }
                 catch(IllegalArgumentException e){
                     e.printStackTrace();
