@@ -19,7 +19,7 @@ repositories {
 }
         
 dependencies{
-    compile 'com.github.blackcat27:library:1.3.1'
+    compile 'com.github.blackcat27:library:1.4.0'
 }
 ```
         
@@ -31,7 +31,7 @@ repositories{
 }
         
 dependencies {
-    compile 'com.github.BlacKCaT27:CurrencyEditText:v1.3.1'
+    compile 'com.github.BlacKCaT27:CurrencyEditText:v1.4.0'
 }
 ```
 
@@ -133,6 +133,17 @@ This method is really just a convenience method for retrieving information about
 that developers take a look at what the Locale and Currency classes offer in terms of denominations, decimal placement, string formatting, etc. 
 
 
+Locales
+=======
+
+CurrencyEditText relies on a `Locale` object to properly format the given value. There are two `Locale` variables that are exposed via getters and setters on a given `CurrencyEditText` object: locale and defaultLocale.
+
+locale is the users default locale setting based upon their Android configuration settings. This value is editable by the user in Android settings. Note that this value *is not* always compatible with ISO-3166. This is used as the "happy path" variable.
+ 
+defaultLocale is a separate value which is treated as a fallback in the event that the provided locale value fails. This may occur due to that value not being part of the ISO-3166 standard. See `Java.util.Locale.getISOCountries()` for a list of supported values. Note that the list of supported values is hard-coded into each version of Java, therefore over time, the list of supported ISO's may change.
+
+The default value for defaultLocale is `Locale.US`. Both this, and the locale value, can be overwritten using setters found on the `CurrencyEditText` object. Be very careful to ensure that should you override defaultLocale's value, you only use values supported by ISO-3166, or an IllegalArgumentException will be thrown by the formatter.
+
 Formatting Values
 =================
 
@@ -160,12 +171,10 @@ String formattedVal = cet.formatCurrency(rawVal);
 Why doesn't CurrencyEditText do \<x\>?
 ====================================
 
-`CurrencyEditText` is designed to be a small, lightweight module to provide ease-of-use to developers. If there is functionality missing that you would like to see added, 
-submit a new Issue and label it as an Enhancement, and I will take a look. I make no guarantees that I will agree to implement it.
+`CurrencyEditText` is designed to be a small, lightweight module to provide ease-of-use to developers. If there is functionality missing that you would like to see added, submit a new Issue and label it as an Enhancement, and I will take a look. I make no guarantees that I will agree to implement it.
 
 Use at your own risk!
 =====================
 
-As called out in the Apache license (which this project falls under), by using this software you agree to use it AS-IS. I make no claims that this code is
-100% bug-free or otherwise without issue. While I've done my best to ensure that rounding errors don't come into play and that all codeflows have been tested, I cannot 
+As called out in the Apache license (which this project falls under), by using this software you agree to use it AS-IS. I make no claims that this code is 100% bug-free or otherwise without issue. While I've done my best to ensure that rounding errors don't come into play and that all codeflows have been tested, I cannot 
 guarantee or provide any sort of warranty that this code will work for you. The onus is on you, and you alone, to analyze this software and determine if it's featureset and quality meet your needs.
