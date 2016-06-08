@@ -31,10 +31,9 @@ public class CurrencyEditText extends EditText {
      */
     public CurrencyEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        processAttributes(context, attrs);
-
         this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
         init();
+        processAttributes(context, attrs);
     }
 
     private void init(){
