@@ -14,19 +14,16 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale locale = getResources().getConfiguration().locale;
+
     private Currency currency;
-    {
-        try {
-            currency = Currency.getInstance(locale);
-        } catch (IllegalArgumentException e) {
-            currency = Currency.getInstance(Locale.US);
-        }
-    }
+
     private Locale defaultLocale = Locale.US;
 
     private boolean defaultHintEnabled = true;
     private boolean allowNegativeValues = false;
     private long valueInLowestDenom = 0L;
+
+    private CurrencyTextWatcher textWatcher;
 
     private String hintCache = null;
     /*
@@ -37,9 +34,29 @@ public class CurrencyEditText extends EditText {
         processAttributes(context, attrs);
 
         this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+        init();
+    }
 
-        CurrencyTextWatcher currencyTextWatcher = new CurrencyTextWatcher(this);
-        this.addTextChangedListener(currencyTextWatcher);
+    private void init(){
+        initCurrency();
+        initCurrencyTextWatcher();
+    }
+
+
+    private void initCurrencyTextWatcher(){
+        if(textWatcher != null){
+            this.removeTextChangedListener(textWatcher);
+        }
+        textWatcher = new CurrencyTextWatcher(this, defaultLocale);
+        this.addTextChangedListener(textWatcher);
+    }
+
+    private void initCurrency(){
+        try {
+            currency = Currency.getInstance(locale);
+        } catch (IllegalArgumentException e) {
+            currency = Currency.getInstance(defaultLocale);
+        }
     }
 
     /**
@@ -108,7 +125,7 @@ public class CurrencyEditText extends EditText {
      */
     public void setLocale(Locale locale){
         this.locale = locale;
-        this.currency = Currency.getInstance(locale);
+        init();
         updateHint();
     }
 
@@ -116,12 +133,14 @@ public class CurrencyEditText extends EditText {
         this.currency = currency;
         this.locale = locale;
 
+        init();
         updateHint();
     }
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
 
+        init();
         updateHint();
     }
 
@@ -151,6 +170,7 @@ public class CurrencyEditText extends EditText {
      */
     public void setDefaultLocale(Locale locale){
         this.defaultLocale = locale;
+        init();
     }
 
     public Locale getDefaultLocale(){
@@ -165,7 +185,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, currency, localedefaultLocale, defaultLocale);
+        return CurrencyTextFormatter.formatText(val, currency, locale, defaultLocale);
     }
 
     /**

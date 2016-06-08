@@ -12,18 +12,18 @@ public final class CurrencyTextFormatter {
 
     private CurrencyTextFormatter(){}
 
-    public static String formatText(String val, Locale locale){
-        return formatText(val, locale, Locale.US);
+    public static String formatText(String val, Currency currency, Locale locale){
+        return formatText(val, currency, locale, Locale.US);
     }
 
-    public static String formatText(String val, Locale locale, Locale defaultLocale){
+    public static String formatText(String val, Currency currency, Locale locale, Locale defaultLocale){
         //special case for the start of a negative number
         if(val.equals("-")) return val;
 
         double CURRENCY_DECIMAL_DIVISOR;
         DecimalFormat currencyFormatter = null;
         try{
-            CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(locale).getDefaultFractionDigits());
+            CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, currency.getDefaultFractionDigits());
             currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(locale);
         }
         catch(IllegalArgumentException e){
