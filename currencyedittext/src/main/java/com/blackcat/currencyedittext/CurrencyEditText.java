@@ -14,6 +14,7 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale locale = getResources().getConfiguration().locale;
+    private Locale defaultLocale = Locale.US;
 
     private boolean defaultHintEnabled = true;
     private boolean allowNegativeValues = false;
@@ -91,7 +92,7 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
-     * Override the default locale used by CurrencyEditText (which is the users device locale).
+     * Override the locale used by CurrencyEditText (which is the users device locale by default).
      * WARNING: If this method is used to set the locale to one not supported by ISO 3166,
      * formatting the text will throw an exception. Also keep in mind that calling this method
      * will set the hint based on the specified locale, which will override any previous hint value.
@@ -111,6 +112,22 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
+     * Override the locale used by CurrencyEditText (which is the users device locale by default).
+     * Defaults to Locale.US.
+     * NOTE: Be absolutely sure that this value is supported by ISO 3166. See
+     * Java.util.Locale.getISOCountries() for a list of currently supported ISO 3166 locales (note that this list
+     * may not be identical on all devices)
+     * @param locale The fallback locale to recover gracefully in the event of the CurrencyEditText's locale value failing.
+     */
+    public void setDefaultLocale(Locale locale){
+        this.defaultLocale = locale;
+    }
+
+    public Locale getDefaultLocale(){
+        return defaultLocale;
+    }
+
+    /**
      * Pass in a value to have it formatted using the same rules used during data entry. 
      * @param val A string which represents the value you'd like formatted. It is expected that this string will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as 
      *            "1000" to represent "$10.00"). Note that formatCuurrency will take in ANY string, and will first strip any non-digit characters before working on that string. If the result of that processing
@@ -118,7 +135,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, locale);
+        return CurrencyTextFormatter.formatText(val, locale, defaultLocale);
     }
 
     /**
@@ -128,7 +145,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(long rawVal){
-        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), locale);
+        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), locale, defaultLocale);
     }
 
     protected void setValueInLowestDenom(Long mValueInLowestDenom) {
