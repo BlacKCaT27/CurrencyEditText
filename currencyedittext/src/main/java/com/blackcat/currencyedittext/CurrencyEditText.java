@@ -14,6 +14,14 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale locale = getResources().getConfiguration().locale;
+    private Currency currency;
+    {
+        try {
+            currency = Currency.getInstance(locale);
+        } catch (IllegalArgumentException e) {
+            currency = Currency.getInstance(Locale.US);
+        }
+    }
     private Locale defaultLocale = Locale.US;
 
     private boolean defaultHintEnabled = true;
@@ -100,7 +108,29 @@ public class CurrencyEditText extends EditText {
      */
     public void setLocale(Locale locale){
         this.locale = locale;
+        this.currency = Currency.getInstance(locale);
+        updateHint();
+    }
 
+    public void setCurrency(Currency currency, Locale locale) {
+        this.currency = currency;
+        this.locale = locale;
+
+        updateHint();
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+
+        updateHint();
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+
+    private void updateHint() {
         if(hintCache != null){
             setHint(hintCache);
         }
@@ -135,7 +165,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, locale, defaultLocale);
+        return CurrencyTextFormatter.formatText(val, currency, localedefaultLocale, defaultLocale);
     }
 
     /**
@@ -145,7 +175,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(long rawVal){
-        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), locale, defaultLocale);
+        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), currency, locale, defaultLocale);
     }
 
     protected void setValueInLowestDenom(Long mValueInLowestDenom) {
