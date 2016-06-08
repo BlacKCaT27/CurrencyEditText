@@ -242,6 +242,6 @@ public class CurrencyEditText extends EditText {
     }
 
     private String getDefaultHintValue() {
-        return Currency.getInstance(locale).getSymbol();
+        return currency.getSymbol();
     }
 }
