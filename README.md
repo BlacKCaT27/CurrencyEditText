@@ -19,7 +19,7 @@ repositories {
 }
         
 dependencies{
-    compile 'com.github.blackcat27:library:1.4.0'
+    compile 'com.github.blackcat27:library:1.4.0-SNAPSHOT'
 }
 ```
         
