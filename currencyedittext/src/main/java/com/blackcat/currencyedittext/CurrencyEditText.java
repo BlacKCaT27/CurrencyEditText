@@ -21,6 +21,7 @@ public class CurrencyEditText extends EditText {
 
     private boolean defaultHintEnabled = true;
     private boolean allowNegativeValues = false;
+    private boolean ignoreDecimals = false;
     private long valueInLowestDenom = 0L;
 
     private CurrencyTextWatcher textWatcher;
@@ -82,10 +83,24 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
+     * Enable the user get the output without decimals
+     */
+    public void setIgnoreDecimals(boolean decimalsIgnored){
+        ignoreDecimals = decimalsIgnored;
+    }
+
+    /**
      * Returns whether or not negative values have been allowed for this CurrencyEditText field
      */
     public boolean areNegativeValuesAllowed(){
         return allowNegativeValues;
+    }
+
+    /**
+     * Returns whether or not decimals values have been ignored for this CurrencyEditText field
+     */
+    public boolean areDecimalsIgnored(){
+        return ignoreDecimals;
     }
 
     /**
@@ -184,7 +199,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, currency, locale, defaultLocale);
+        return CurrencyTextFormatter.formatText(val, currency, locale, defaultLocale, ignoreDecimals);
     }
 
     /**
@@ -194,7 +209,7 @@ public class CurrencyEditText extends EditText {
      * @return A locale-formatted string of the passed in value, represented as currency.
      */
     public String formatCurrency(long rawVal){
-        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), currency, locale, defaultLocale);
+        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), currency, locale, defaultLocale, ignoreDecimals);
     }
 
     protected void setValueInLowestDenom(Long mValueInLowestDenom) {
@@ -213,6 +228,7 @@ public class CurrencyEditText extends EditText {
         configureHint(defaultHintAttrVal);
 
         this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
+        this.setIgnoreDecimals(array.getBoolean(R.styleable.CurrencyEditText_ignore_decimals, false));
 
         array.recycle();
     }

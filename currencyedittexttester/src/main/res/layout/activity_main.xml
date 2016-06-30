@@ -27,6 +27,12 @@
         android:visibility="invisible"
         />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ignore decimals"
+        android:id="@+id/cb_ignore_decimals" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
