@@ -74,7 +74,7 @@ class CurrencyTextWatcher implements TextWatcher {
                 editText.setValueInLowestDenom(Long.valueOf(newText));
             }
             try{
-                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getCurrency(), editText.getLocale(), defaultLocale);
+                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getCurrency(), editText.getLocale(), defaultLocale, editText.areDecimalsIgnored());
             }
             catch(IllegalArgumentException exception){
                 textToDisplay = lastGoodInput;

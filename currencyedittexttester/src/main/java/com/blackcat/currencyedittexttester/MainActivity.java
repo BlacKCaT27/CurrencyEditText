@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
@@ -24,6 +25,7 @@ public class MainActivity extends Activity {
     TextView string_val;
     TextView et_raw_val;
     TextView et_formatted_val;
+    CheckBox cb_ignore_decimals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,15 @@ public class MainActivity extends Activity {
         string_val = (TextView) findViewById(R.id.string_val);
         et_raw_val = (TextView) findViewById(R.id.et_raw_val);
         et_formatted_val = (TextView) findViewById(R.id.et_formatted_val);
+        cb_ignore_decimals = (CheckBox) findViewById(R.id.cb_ignore_decimals);
+
+        cb_ignore_decimals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cet.setIgnoreDecimals(cb_ignore_decimals.isChecked());
+                cet.setText(String.valueOf(cet.getRawValue()));
+            }
+        });
 
         Button clickButton = (Button) findViewById(R.id.button);
         
@@ -51,7 +62,7 @@ public class MainActivity extends Activity {
 
                 String result = "oops";
                 try{
-                    result = CurrencyTextFormatter.formatText(Long.toString(randNum), Currency.getInstance(Locale.KOREA), Locale.KOREA);
+                    result = CurrencyTextFormatter.formatText(Long.toString(randNum), Currency.getInstance(Locale.KOREA), Locale.KOREA, false);
                 }
                 catch(IllegalArgumentException e){
                     e.printStackTrace();
