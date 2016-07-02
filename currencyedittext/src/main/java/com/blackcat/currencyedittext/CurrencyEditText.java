@@ -243,4 +243,21 @@ public class CurrencyEditText extends EditText {
     private String getDefaultHintValue() {
         return currency.getSymbol();
     }
+
+    public Double getValue() {
+        return valueInLowestDenom / getCentsMaxValue();
+    }
+
+    public void setValue(Double value) {
+        if (value == null) {
+            value = 0d;
+        }
+        String formattedValue = formatCurrency(Long.toString(
+                (long) (value * getCentsMaxValue())));
+        setText(formattedValue);
+    }
+
+    public double getCentsMaxValue() {
+        return Math.pow(10d, currency.getDefaultFractionDigits());
+    }
 }
