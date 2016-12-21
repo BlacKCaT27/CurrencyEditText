@@ -39,9 +39,6 @@ public class MainActivity extends Activity {
         Button clickButton = (Button) findViewById(R.id.button);
         Button resetButton = (Button) findViewById(R.id.button_reset);
 
-        cet.setDefaultHintEnabled(false);
-        cet.setHint("Custom Hint");
-
         clickButton.setOnClickListener( new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override

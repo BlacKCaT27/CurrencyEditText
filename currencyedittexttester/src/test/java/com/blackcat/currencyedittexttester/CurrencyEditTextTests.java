@@ -85,4 +85,14 @@ public class CurrencyEditTextTests {
         String hint = cet.getHint().toString();
         Assert.assertEquals("TestHint", hint);
     }
+
+    @Test
+    public void shouldClearTextAndDisplayHint() {
+        currencyEditText.setText("$1,000");
+        currencyEditText.setText(null);
+
+        Assert.assertEquals(currencyEditText.getRawValue(), 0L);
+        Assert.assertEquals(currencyEditText.getText(), "");
+        Assert.assertEquals(currencyEditText.getHint().toString(), "$");
+    }
 }
