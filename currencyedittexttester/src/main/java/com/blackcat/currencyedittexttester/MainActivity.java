@@ -37,7 +37,11 @@ public class MainActivity extends Activity {
         et_formatted_val = (TextView) findViewById(R.id.et_formatted_val);
 
         Button clickButton = (Button) findViewById(R.id.button);
-        
+        Button resetButton = (Button) findViewById(R.id.button_reset);
+
+        cet.setDefaultHintEnabled(false);
+        cet.setHint("Custom Hint");
+
         clickButton.setOnClickListener( new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -58,6 +62,13 @@ public class MainActivity extends Activity {
                 }
 
                 et_formatted_val.setText(result);
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cet.setText("");
             }
         });
         

@@ -31,3 +31,4 @@ proguard/
 
 *.iml
 
+.DS_Store

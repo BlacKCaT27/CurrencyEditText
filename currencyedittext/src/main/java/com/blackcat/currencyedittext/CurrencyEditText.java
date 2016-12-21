@@ -11,7 +11,7 @@ import java.util.Currency;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
-public class CurrencyEditText extends EditText {
+public class CurrencyEditText extends EditText implements TextClearedWatcher {
 
     private Locale locale = getResources().getConfiguration().locale;
 
@@ -242,5 +242,10 @@ public class CurrencyEditText extends EditText {
 
     private String getDefaultHintValue() {
         return currency.getSymbol();
+    }
+
+    @Override
+    public void reset() {
+        valueInLowestDenom = 0L;
     }
 }
