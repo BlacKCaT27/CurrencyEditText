@@ -3,6 +3,7 @@ package com.blackcat.currencyedittexttester;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +45,8 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 raw_val.setText(Long.toString(cet.getRawValue()));
                 string_val.setText(cet.formatCurrency(Long.toString(cet.getRawValue())));
+                Log.d("MainActivity", "Locale: " + getResources().getConfiguration().locale.toString());
+                Log.d("MainActivity", "DefaultLocale: " + Locale.getDefault());
 
                 long maxRange = 15000000;
                 long randNum = (long) (new Random().nextDouble() * maxRange);
@@ -51,18 +54,17 @@ public class MainActivity extends Activity {
 
                 String result = "oops";
                 try{
-                    result = CurrencyTextFormatter.formatText(Long.toString(randNum), Currency.getInstance(Locale.KOREA), Locale.KOREA);
+                    Locale l = Locale.getDefault();
+                    result = CurrencyTextFormatter.formatText(Long.toString(randNum), Currency.getInstance(l), l, Locale.getDefault());
                 }
                 catch(IllegalArgumentException e){
-                    e.printStackTrace();
+                    Log.e("MainActivity", e.getLocalizedMessage());
                 }
 
                 et_formatted_val.setText(result);
             }
         });
-        
-        //cet.setText("test failure");
-        //cet.formatCurrency("test failure two");
+
     }
 
 

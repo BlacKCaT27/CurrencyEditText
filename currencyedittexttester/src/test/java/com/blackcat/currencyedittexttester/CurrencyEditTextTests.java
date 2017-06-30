@@ -85,4 +85,5 @@ public class CurrencyEditTextTests {
         String hint = cet.getHint().toString();
         Assert.assertEquals("TestHint", hint);
     }
+
 }

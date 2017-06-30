@@ -1,6 +1,8 @@
 package com.blackcat.currencyedittext;
 
 
+import android.util.Log;
+
 import java.text.DecimalFormat;
 import java.util.Currency;
 import java.util.Locale;
@@ -27,6 +29,7 @@ public final class CurrencyTextFormatter {
             currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(locale);
         }
         catch(IllegalArgumentException e){
+            Log.e("CurrencyTextFormatter", "Illegal argument detected for locale: " + locale + ", falling back to default value: " + defaultLocale);
             CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(defaultLocale).getDefaultFractionDigits());
             currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(defaultLocale);
         }
