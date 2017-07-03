@@ -71,7 +71,7 @@ class CurrencyTextWatcher implements TextWatcher {
             newText = (editText.areNegativeValuesAllowed()) ? newText.replaceAll("[^0-9/-]", "") : newText.replaceAll("[^0-9]", "");
             if(!newText.equals("") && newText.length() < MAX_RAW_INPUT_LENGTH && !newText.equals("-")){
                 //Store a copy of the raw input to be retrieved later by getRawValue
-                editText.setValueInLowestDenom(Long.valueOf(newText));
+                editText.setRawValue(Long.valueOf(newText));
             }
             try{
                 textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getCurrency(), editText.getLocale(), defaultLocale);

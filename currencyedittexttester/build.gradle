@@ -30,7 +30,10 @@ android {
             includeAndroidResources = true
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test/java'] } }
+    packagingOptions {
+        exclude 'licenses/javolution.license.TXT'
+    }
+    sourceSets { main { java.srcDirs = ['src/main/java'] } }
 }
 repositories {
     mavenCentral()
@@ -39,7 +42,7 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':currencyedittext')
-    implementation 'junit:junit:4.12'
-    implementation "org.robolectric:robolectric:3.3.2"
-    implementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.robolectric:robolectric:3.3.2"
+    testImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
 }

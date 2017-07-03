@@ -18,6 +18,8 @@
         android:id="@+id/cet"
         />
 
+    <!-- need two different CET instances to support
+    xml attribute vs. API tests -->
     <com.blackcat.currencyedittext.CurrencyEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

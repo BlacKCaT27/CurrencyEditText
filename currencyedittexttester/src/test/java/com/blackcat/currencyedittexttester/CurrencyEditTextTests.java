@@ -20,13 +20,15 @@ import java.util.Locale;
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP)
 public class CurrencyEditTextTests {
 
-    protected MainActivity mainActivity;
     private CurrencyEditText currencyEditText;
+    private CurrencyEditText currencyEditTextForXmlTests;
 
     @Before
     public void setup() {
-        mainActivity = Robolectric.setupActivity(MainActivity.class);
+        MainActivity mainActivity = Robolectric.setupActivity(MainActivity.class);
+
         currencyEditText = (CurrencyEditText) mainActivity.findViewById(R.id.cet);
+        currencyEditTextForXmlTests = (CurrencyEditText) mainActivity.findViewById(R.id.cet_for_testing);
     }
 
     @Test
@@ -37,10 +39,19 @@ public class CurrencyEditTextTests {
     }
 
     @Test
-    public void EnteringValidNegativeStringShouldGiveValidRawValueTest() {
+    public void EnteringValidNegativeStringShouldGiveValidRawValueWhenNegativesAllowedTest() {
+        currencyEditText.setAllowNegativeValues(true);
         currencyEditText.setText("-$1,000");
         long result = currencyEditText.getRawValue();
         Assert.assertEquals(-1000, result);
+    }
+
+    @Test
+    public void NegativeSignsAreIgnoredIfNegativeValuesAreNotAllowedTest() {
+        currencyEditText.setAllowNegativeValues(false);
+        currencyEditText.setText("-$1,000");
+        long result = currencyEditText.getRawValue();
+        Assert.assertEquals(1000, result);
     }
 
     @Test
@@ -52,8 +63,8 @@ public class CurrencyEditTextTests {
     @Test
     public void FormatGPBCurrencyWithValidLongParametersTest() {
         Locale gbLocale = Locale.UK;
-        currencyEditText.setLocale(gbLocale);
-        String hint = currencyEditText.getHint().toString();
+        currencyEditText.configureViewForLocale(gbLocale);
+        String hint = currencyEditText.getHintString();
         Assert.assertEquals("GBP", hint);
         String result = currencyEditText.formatCurrency(100000);
         Assert.assertEquals("£1,000.00", result);
@@ -62,8 +73,9 @@ public class CurrencyEditTextTests {
     @Test
     public void FormatEuroCurrencyWithValidLongParametersTest() {
         Locale euroLocale = Locale.FRANCE;
-        currencyEditText.setLocale(euroLocale);
-        String hint = currencyEditText.getHint().toString();
+        currencyEditText.configureViewForLocale(euroLocale);
+
+        String hint = currencyEditText.getHintString();
         Assert.assertEquals("EUR", hint);
         String result = currencyEditText.formatCurrency(100000);
         String expectedResult = "1 000,00 €";
@@ -72,17 +84,16 @@ public class CurrencyEditTextTests {
 
     @Test
     public void SetHintAndVerifyDefaultHintIsOverriddenTest() {
-        String defaultHint = currencyEditText.getHint().toString();
+        String defaultHint = currencyEditText.getHintString();
         Assert.assertEquals("$", defaultHint);
 
         currencyEditText.setHint("Test");
-        Assert.assertEquals("Test", currencyEditText.getHint().toString());
+        Assert.assertEquals("Test", currencyEditText.getHint());
     }
 
     @Test
     public void SetHintInXMLAndVerifyDefaultHintIsOverriddenTest() {
-        CurrencyEditText cet = (CurrencyEditText) mainActivity.findViewById(R.id.cet_for_testing);
-        String hint = cet.getHint().toString();
+        String hint = currencyEditTextForXmlTests.getHintString();
         Assert.assertEquals("TestHint", hint);
     }
 
