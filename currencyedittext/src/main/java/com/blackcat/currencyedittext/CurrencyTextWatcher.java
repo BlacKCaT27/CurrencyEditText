@@ -17,7 +17,6 @@ class CurrencyTextWatcher implements TextWatcher {
     private String lastGoodInput;
 
     double CURRENCY_DECIMAL_DIVISOR;
-    final int CURSOR_SPACING_COMPENSATION = 2;
 
     //Setting a max length because after this length, java represents doubles in scientific notation which breaks the formatter
     final int MAX_RAW_INPUT_LENGTH = 15;
@@ -84,10 +83,9 @@ class CurrencyTextWatcher implements TextWatcher {
             //Store the last known good input so if there are any issues with new input later, we can fall back gracefully.
             lastGoodInput = textToDisplay;
 
-            //locate the position to move the cursor to. The CURSOR_SPACING_COMPENSATION constant is to account for locales where the Euro is displayed as " €" (2 characters).
-            //A more robust cursor strategy will be implemented at a later date.
-            int cursorPosition = editText.getText().length();
-            if(textToDisplay.length() > 0 && Character.isDigit(textToDisplay.charAt(0))) cursorPosition -= CURSOR_SPACING_COMPENSATION;
+            //locate the position to move the cursor to. After the last digit.
+			String str = editText.getText().toString();
+			int cursorPosition = indexOfLastDigit(str) + 1;
 
             //Move the cursor to the end of the numerical value to enter the next number in a right-to-left fashion, like you would on a calculator.
             editText.setSelection(cursorPosition);
@@ -96,6 +94,21 @@ class CurrencyTextWatcher implements TextWatcher {
         else{
             ignoreIteration = false;
         }
+    }
+
+    private int indexOfLastDigit(String str)
+    {
+        int index = 0;
+
+        for(int i=0;i<str.length();i++)
+        {
+            if(Character.isDigit(str.charAt(i)))
+            {
+                index = i;
+            }
+        }
+
+        return index;
     }
 
     @Override
