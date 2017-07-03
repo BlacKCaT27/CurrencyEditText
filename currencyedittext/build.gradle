@@ -16,13 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test/java'] } }
+    sourceSets { main { java.srcDirs = ['src/main/java'] } }
 }
 repositories {
     mavenCentral()
 }
 
-dependencies {
-    testCompile 'junit:junit:4.12'
-}
 apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'

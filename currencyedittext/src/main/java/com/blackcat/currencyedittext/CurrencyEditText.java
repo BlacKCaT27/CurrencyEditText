@@ -13,7 +13,7 @@ import java.util.Locale;
 @SuppressWarnings("unused")
 public class CurrencyEditText extends EditText {
 
-    private Locale locale = getResources().getConfiguration().locale;
+    private Locale locale;
 
     private Currency currency;
 
@@ -37,6 +37,7 @@ public class CurrencyEditText extends EditText {
     }
 
     private void init(){
+        locale = getResources().getConfiguration().locale;
         initCurrency();
         initCurrencyTextWatcher();
     }

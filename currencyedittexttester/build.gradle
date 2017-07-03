@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha5'
     }
 }
 
@@ -18,8 +18,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -27,17 +25,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java'] } }
+    testOptions {
+        unitTests{
+            includeAndroidResources = true
+        }
+    }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test/java'] } }
 }
 repositories {
     mavenCentral()
     jcenter()
 }
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':currencyedittext')
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.1"
-    compile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    compile 'com.android.support.test:runner:0.5'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':currencyedittext')
+    implementation 'junit:junit:4.12'
+    implementation "org.robolectric:robolectric:3.3.2"
+    implementation 'com.android.support.test.espresso:espresso-core:2.2.2'
 }
