@@ -13,4 +13,6 @@
     <string name="currencyedittext_with_negative_values_enabled">CurrencyEditText with negative values enabled</string>
     <string name="setlocale_currencyedittext_tool"><u>SetLocale CurrencyEditText Tool</u></string>
     <string name="local_info">Locale Info:</string>
+    <string name="test_hint">TestHint</string>
+    <string name="set_decimal_digits_tool">Set Decimal Digits Tool</string>
 </resources>

@@ -97,4 +97,12 @@ public class CurrencyEditTextTests {
         Assert.assertEquals("TestHint", hint);
     }
 
+    @Test
+    public void SeparatorProperlyBreaksApartCurrencyAndValueForSwissFrancTest(){
+        currencyEditText.configureViewForLocale(new Locale.Builder().setRegion("CH").build());
+
+        String result = currencyEditText.formatCurrency(1000);
+
+        Assert.assertEquals("CHF 10.00", result);
+    }
 }

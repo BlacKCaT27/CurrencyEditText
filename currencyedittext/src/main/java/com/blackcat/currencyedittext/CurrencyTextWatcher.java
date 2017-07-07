@@ -2,9 +2,7 @@ package com.blackcat.currencyedittext;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 
-import java.util.Currency;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
@@ -16,11 +14,8 @@ class CurrencyTextWatcher implements TextWatcher {
     private boolean ignoreIteration;
     private String lastGoodInput;
 
-    double CURRENCY_DECIMAL_DIVISOR;
-    final int CURSOR_SPACING_COMPENSATION = 2;
-
     //Setting a max length because after this length, java represents doubles in scientific notation which breaks the formatter
-    final int MAX_RAW_INPUT_LENGTH = 15;
+    private final int MAX_RAW_INPUT_LENGTH = 15;
 
 
     /**
@@ -38,20 +33,11 @@ class CurrencyTextWatcher implements TextWatcher {
      *                Used for replacing user-entered text with formatted text as well as handling cursor position for inputting monetary values
      * @param defaultLocale optional locale to default to in the event that the provided CurrencyEditText locale fails due to being unsupported
      */
-    public CurrencyTextWatcher(CurrencyEditText textBox, Locale defaultLocale){
+    CurrencyTextWatcher(CurrencyEditText textBox, Locale defaultLocale){
         editText = textBox;
         lastGoodInput = "";
         ignoreIteration = false;
         this.defaultLocale = defaultLocale;
-
-        //Different countries use different fractional values for denominations (0.999 <x> vs. 0.99 cents), therefore this must be defined at runtime
-        try{
-            CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(editText.getLocale()).getDefaultFractionDigits());
-        }
-        catch(IllegalArgumentException e){
-            Log.e("CurrencyTextWatcher", "Unsupported locale provided, defaulting to Locale.US. Error: " + e.getMessage());
-            CURRENCY_DECIMAL_DIVISOR = (int) Math.pow(10, Currency.getInstance(defaultLocale).getDefaultFractionDigits());
-        }
     }
 
     /**
@@ -84,10 +70,10 @@ class CurrencyTextWatcher implements TextWatcher {
             //Store the last known good input so if there are any issues with new input later, we can fall back gracefully.
             lastGoodInput = textToDisplay;
 
-            //locate the position to move the cursor to. The CURSOR_SPACING_COMPENSATION constant is to account for locales where the Euro is displayed as " €" (2 characters).
-            //A more robust cursor strategy will be implemented at a later date.
-            int cursorPosition = editText.getText().length();
-            if(textToDisplay.length() > 0 && Character.isDigit(textToDisplay.charAt(0))) cursorPosition -= CURSOR_SPACING_COMPENSATION;
+            //locate the position to move the cursor to, which will always be the last digit.
+            String currentText = editText.getText().toString();
+            int cursorPosition = indexOfLastDigit(currentText) + 1;
+
 
             //Move the cursor to the end of the numerical value to enter the next number in a right-to-left fashion, like you would on a calculator.
             editText.setSelection(cursorPosition);
@@ -96,6 +82,20 @@ class CurrencyTextWatcher implements TextWatcher {
         else{
             ignoreIteration = false;
         }
+
+    }
+
+    //Thanks to Lucas Eduardo for this contribution to update the cursor placement code.
+    private int indexOfLastDigit(String str){
+        int result = 0;
+
+        for(int i = 0; i < str.length(); i++){
+            if(Character.isDigit(str.charAt(i))){
+                result = i;
+            }
+        }
+
+        return result;
     }
 
     @Override

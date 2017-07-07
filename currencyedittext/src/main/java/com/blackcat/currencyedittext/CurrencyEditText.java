@@ -100,6 +100,16 @@ public class CurrencyEditText extends EditText {
     }
 
 
+    /**
+     * Sets the value to be formatted and displayed in the CurrencyEditText view.
+     *
+     * @param value - The value to be converted, represented in the target currencies lowest denomination (e.g. pennies).
+     */
+    public void SetValue(long value){
+        String formattedText = CurrencyTextFormatter.formatText(String.valueOf(value), currentCurrency, currentLocale, defaultLocale);
+        setText(formattedText);
+    }
+
     protected void setRawValue(long value) {
         rawValue = value;
     }
@@ -131,6 +141,11 @@ public class CurrencyEditText extends EditText {
      * Override the locale used by CurrencyEditText (which is the users device locale by default).
      *
      * Will also update the hint text if a custom hint was not provided.
+     *
+     * IMPORTANT - This method does NOT update the currently set Currency object used by
+     * this CurrencyEditText instance. If your use case dictates that Currency and Locale
+     * should never break from their default pairing, use 'configureViewForLocale(locale)' instead
+     * of this method.
      * @param locale The deviceLocale to set the CurrencyEditText box to adhere to.
      */
     public void setLocale(Locale locale){
@@ -206,6 +221,10 @@ public class CurrencyEditText extends EditText {
         this.defaultLocale = locale;
     }
 
+    /**
+     * The currently held default Locale to fall back on in the event of a failure with the Locale field (typically
+     * due to the locale being set to a non-standards-compliant value.
+     */
     public Locale getDefaultLocale(){
         return defaultLocale;
     }
