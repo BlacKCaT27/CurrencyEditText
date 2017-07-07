@@ -18,7 +18,6 @@ public class CurrencyEditText extends EditText {
 
     private Locale defaultLocale = Locale.US;
 
-    private boolean defaultHintEnabled = true;
     private boolean allowNegativeValues = false;
 
     private long rawValue = 0L;
@@ -67,25 +66,6 @@ public class CurrencyEditText extends EditText {
             }
         }
         return currency;
-    }
-
-    /**
-     * Sets whether or or not the Default Hint (users local currentCurrency symbol) will be shown
-     * in the textbox when no value has yet been entered.
-     *
-     * Note: Has no effect if a hint value is set in this instances backing XML.
-     * @param useDefaultHint - true to enable default hint, false to disable
-     */
-    public void setDefaultHintEnabled(boolean useDefaultHint) {
-        this.defaultHintEnabled = useDefaultHint;
-    }
-
-    /**
-     * Determine whether or not the default hint is currently enabled for this view.
-     * @return true if the default hint is enabled, false if it is not.
-     */
-    public boolean getDefaultHintEnabled(){
-        return this.defaultHintEnabled;
     }
 
     /**
@@ -162,6 +142,8 @@ public class CurrencyEditText extends EditText {
      * Convenience method to get the current Hint back as a string rather than a CharSequence
      */
     public String getHintString() {
+        CharSequence result = super.getHint();
+        if (result == null) return null;
         return super.getHint().toString();
     }
 
@@ -179,7 +161,7 @@ public class CurrencyEditText extends EditText {
     /**
      * Override the currency used by this CurrencyEditText instance. Useful if you want to give
      * your users the ability to use different currencies but still wish for the viewable text
-     * to be formatted according to their locale For example, some european countries display
+     * to be formatted according to their locale. For example, some european countries display
      * the euro symbol (€) on the left side of the amount, while others display it on the right.
      */
     public void setCurrency(Currency currency) {
@@ -198,7 +180,7 @@ public class CurrencyEditText extends EditText {
      *
      * This is the most 'fool proof' way of configuring a CurrencyEditText view when not
      * relying on the default implementation, and is the recommended approach for handling
-     * locale/currency setup.
+     * locale/currency setup if you choose not to rely on the default behavior.
      */
     public void configureViewForLocale(Locale locale){
         this.currentLocale = locale;
@@ -207,7 +189,7 @@ public class CurrencyEditText extends EditText {
     }
 
     private void updateHint() {
-        if(hintCache == null && defaultHintEnabled){
+        if(hintCache == null){
             setHint(getDefaultHintValue());
         }
     }
@@ -256,28 +238,12 @@ public class CurrencyEditText extends EditText {
 
     private void processAttributes(Context context, AttributeSet attrs){
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CurrencyEditText);
-
-        boolean defaultHintAttrVal = array.getBoolean(R.styleable.CurrencyEditText_enable_default_hint, true);
-        configureHint(defaultHintAttrVal);
+        this.hintCache = getHintString();
         updateHint();
+
         this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
 
         array.recycle();
-    }
-
-    private void configureHint(boolean defaultHintAttrVal){
-
-        if(hintAlreadySet()){
-            this.setDefaultHintEnabled(false);
-            this.hintCache = getHintString();
-        }
-        else{
-            this.setDefaultHintEnabled(defaultHintAttrVal);
-        }
-    }
-
-    private boolean hintAlreadySet(){
-        return (this.getHint() != null && !this.getHint().equals(""));
     }
 
     private String getDefaultHintValue() {

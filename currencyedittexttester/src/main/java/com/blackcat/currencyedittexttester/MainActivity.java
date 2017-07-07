@@ -7,7 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blackcat.currencyedittext.CurrencyEditText;
@@ -25,6 +28,9 @@ public class MainActivity extends Activity {
     TextView string_val;
     TextView et_raw_val;
     TextView et_formatted_val;
+    TextView testable_locales_locale_data;
+    Spinner testable_locales_spinner;
+    CurrencyEditText testable_locales_cet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +42,17 @@ public class MainActivity extends Activity {
         string_val = (TextView) findViewById(R.id.string_val);
         et_raw_val = (TextView) findViewById(R.id.et_raw_val);
         et_formatted_val = (TextView) findViewById(R.id.et_formatted_val);
+        testable_locales_spinner = (Spinner) findViewById(R.id.spinner_testable_locales);
+        testable_locales_locale_data = (TextView) findViewById(R.id.testable_locales_locale_info);
+        testable_locales_cet = (CurrencyEditText) findViewById(R.id.testable_locales_cet);
 
+        configureRefreshButton();
+        configureTestableLocalesTool();
+
+    }
+
+    private void configureRefreshButton(){
         Button clickButton = (Button) findViewById(R.id.button);
-        
         clickButton.setOnClickListener( new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -64,9 +78,59 @@ public class MainActivity extends Activity {
                 et_formatted_val.setText(result);
             }
         });
-
     }
 
+    private void configureTestableLocalesTool(){
+
+        String[] spinnerContents = Locale.getISOCountries();
+
+        int startingPosition = 0;
+
+        for (int i = 0; i < spinnerContents.length; i++){
+            if (spinnerContents[i].equals("US")){
+                startingPosition = i;
+                break;
+            }
+        }
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerContents);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        testable_locales_spinner.setAdapter(spinnerArrayAdapter);
+        testable_locales_spinner.setSelection(startingPosition);
+
+        configureViewForLocale((String) testable_locales_spinner.getSelectedItem());
+
+        testable_locales_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                configureViewForLocale((String) testable_locales_spinner.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                configureViewForLocale("US");
+            }
+        });
+    }
+
+    private void configureViewForLocale(String locale){
+
+        Locale localeInQuestion = new Locale.Builder().setRegion(locale).build();
+        String localeInfo = "Country: " +
+                             localeInQuestion.getDisplayCountry() +
+                             System.lineSeparator() +
+                             "Country Code: " +
+                             localeInQuestion.getCountry() +
+                             System.lineSeparator() +
+                             "Currency: " +
+                             Currency.getInstance(localeInQuestion).getDisplayName() +
+                             System.lineSeparator() +
+                             "Currency Code: " +
+                             Currency.getInstance(localeInQuestion).getCurrencyCode();
+
+        testable_locales_locale_data.setText(localeInfo);
+        testable_locales_cet.configureViewForLocale(localeInQuestion);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
