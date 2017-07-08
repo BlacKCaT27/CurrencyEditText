@@ -15,4 +15,6 @@
     <string name="local_info">Locale Info:</string>
     <string name="test_hint">TestHint</string>
     <string name="set_decimal_digits_tool">Set Decimal Digits Tool</string>
+    <string name="setcurrency_currencyedittext_tool">SetCurrency CurrencyEditText Tool</string>
+    <string name="currency_info">Currency Info:</string>
 </resources>

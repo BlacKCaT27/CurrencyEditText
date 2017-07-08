@@ -14,7 +14,6 @@ import java.util.Locale;
 public class CurrencyEditText extends EditText {
 
     private Locale currentLocale;
-    private Currency currentCurrency;
 
     private Locale defaultLocale = Locale.US;
 
@@ -25,6 +24,8 @@ public class CurrencyEditText extends EditText {
     private CurrencyTextWatcher textWatcher;
     private String hintCache = null;
 
+    private Integer decimalDigits = null;
+
     /*
     PUBLIC METHODS
      */
@@ -32,40 +33,6 @@ public class CurrencyEditText extends EditText {
         super(context, attrs);
         init();
         processAttributes(context, attrs);
-    }
-
-    private void init(){
-        this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-        currentLocale = retrieveLocale();
-        currentCurrency = getCurrencyForLocale(currentLocale);
-        initCurrencyTextWatcher();
-    }
-
-    private void initCurrencyTextWatcher(){
-        if(textWatcher != null){
-            this.removeTextChangedListener(textWatcher);
-        }
-        textWatcher = new CurrencyTextWatcher(this, defaultLocale);
-        this.addTextChangedListener(textWatcher);
-    }
-
-    private Currency getCurrencyForLocale(Locale locale){
-        Currency currency;
-        try {
-            currency = Currency.getInstance(locale);
-        }
-        catch(IllegalArgumentException e){
-            try{
-                Log.w("CurrencyEditText", String.format("Error occurred while retrieving currentCurrency information with current locale '%s'. Trying default locale '%s'...", currentLocale, defaultLocale));
-                currency = Currency.getInstance(defaultLocale);
-            }
-            catch(Exception e1){
-                Log.e("CurrencyEditText", "Both device and configured default locales failed to report currentCurrency data. Defaulting to USD.");
-                currency = Currency.getInstance(Locale.US);
-            }
-        }
-        return currency;
     }
 
     /**
@@ -99,31 +66,14 @@ public class CurrencyEditText extends EditText {
         return rawValue;
     }
 
-
     /**
      * Sets the value to be formatted and displayed in the CurrencyEditText view.
      *
      * @param value - The value to be converted, represented in the target currencies lowest denomination (e.g. pennies).
      */
     public void SetValue(long value){
-        String formattedText = CurrencyTextFormatter.formatText(String.valueOf(value), currentCurrency, currentLocale, defaultLocale);
+        String formattedText = format(value);
         setText(formattedText);
-    }
-
-    protected void setRawValue(long value) {
-        rawValue = value;
-    }
-
-    private Locale retrieveLocale(){
-        Locale locale;
-        try{
-            locale = getResources().getConfiguration().locale;
-        }
-        catch(Exception e){
-            Log.w("CurrencyEditText", String.format("An error occurred while retrieving users device locale, using fallback locale '%s'", defaultLocale), e);
-            locale = defaultLocale;
-        }
-        return locale;
     }
 
     /**
@@ -150,7 +100,7 @@ public class CurrencyEditText extends EditText {
      */
     public void setLocale(Locale locale){
         currentLocale = locale;
-        updateHint();
+        refreshView();
     }
 
     /**
@@ -163,29 +113,38 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
-     * Override the currency and locale objects used by this CurrencyEditText instance.
-     * Note: If the locale value is not an ISO-3166 compliant Locale, it will be ignored
-     * in favor of the defaultLocale field.
+     * Returns the number of decimal digits this CurrencyEditText instance is currently configured
+     * to use. This value will be based on the current Currency object unless the value
+     * was overwritten by setDecimalDigits().
      */
-    public void setCurrency(Currency currency, Locale locale) {
-        this.currentCurrency = currency;
-        this.currentLocale = locale;
-        updateHint();
+    public int getDecimalDigits(){
+        if (decimalDigits != null){
+            return decimalDigits;
+        }
+        else{
+            return Currency.getInstance(currentLocale).getDefaultFractionDigits();
+        }
     }
 
     /**
-     * Override the currency used by this CurrencyEditText instance. Useful if you want to give
-     * your users the ability to use different currencies but still wish for the viewable text
-     * to be formatted according to their locale. For example, some european countries display
-     * the euro symbol (€) on the left side of the amount, while others display it on the right.
+     * Sets the number of decimal digits the currencyTextFormatter will use, overriding
+     * the number of digits specified by the current currency. Note, however,
+     * that calls to setCurrency() and configureViewForLocale() will override this value.
+     *
+     * Note that this method will also invoke the formatter to update the current view if the current
+     * value is not null/empty.
+     *
+     * @param digits The number of digits to be shown following the decimal in the formatted text.
+     *               Value must be between 0 and 340 (inclusive).
+     * @throws IllegalArgumentException If provided value does not fall within the range (0, 340) inclusive.
      */
-    public void setCurrency(Currency currency) {
-        this.currentCurrency = currency;
-        updateHint();
-    }
+    public void setDecimalDigits(int digits){
+        if(digits < 0 || digits > 340){
+            throw new IllegalArgumentException("Decimal Digit value must be between 0 and 340");
+        }
+        decimalDigits = digits;
 
-    public Currency getCurrency() {
-        return currentCurrency;
+        refreshView();
     }
 
     /**
@@ -199,14 +158,9 @@ public class CurrencyEditText extends EditText {
      */
     public void configureViewForLocale(Locale locale){
         this.currentLocale = locale;
-        this.currentCurrency = getCurrencyForLocale(locale);
-        updateHint();
-    }
-
-    private void updateHint() {
-        if(hintCache == null){
-            setHint(getDefaultHintValue());
-        }
+        Currency currentCurrency = getCurrencyForLocale(locale);
+        decimalDigits = currentCurrency.getDefaultFractionDigits();
+        refreshView();
     }
 
     /**
@@ -237,7 +191,7 @@ public class CurrencyEditText extends EditText {
      * @return A deviceLocale-formatted string of the passed in value, represented as currentCurrency.
      */
     public String formatCurrency(String val){
-        return CurrencyTextFormatter.formatText(val, currentCurrency, currentLocale, defaultLocale);
+        return format(val);
     }
 
     /**
@@ -247,13 +201,43 @@ public class CurrencyEditText extends EditText {
      * @return A deviceLocale-formatted string of the passed in value, represented as currentCurrency.
      */
     public String formatCurrency(long rawVal){
-        return CurrencyTextFormatter.formatText(String.valueOf(rawVal), currentCurrency, currentLocale, defaultLocale);
+        return format(rawVal);
     }
 
 
     /*
     PRIVATE HELPER METHODS
      */
+
+    private void refreshView(){
+        setText(format(getRawValue()));
+        updateHint();
+    }
+
+    private String format(long val){
+        return CurrencyTextFormatter.formatText(String.valueOf(val), currentLocale, defaultLocale, decimalDigits);
+    }
+
+    private String format(String val){
+        return CurrencyTextFormatter.formatText(val, currentLocale, defaultLocale, decimalDigits);
+    }
+
+    private void init(){
+        this.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+        currentLocale = retrieveLocale();
+        Currency currentCurrency = getCurrencyForLocale(currentLocale);
+        decimalDigits = currentCurrency.getDefaultFractionDigits();
+        initCurrencyTextWatcher();
+    }
+
+    private void initCurrencyTextWatcher(){
+        if(textWatcher != null){
+            this.removeTextChangedListener(textWatcher);
+        }
+        textWatcher = new CurrencyTextWatcher(this);
+        this.addTextChangedListener(textWatcher);
+    }
 
     private void processAttributes(Context context, AttributeSet attrs){
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CurrencyEditText);
@@ -265,7 +249,47 @@ public class CurrencyEditText extends EditText {
         array.recycle();
     }
 
+    private void updateHint() {
+        if(hintCache == null){
+            setHint(getDefaultHintValue());
+        }
+    }
+
     private String getDefaultHintValue() {
-        return currentCurrency.getSymbol();
+        return Currency.getInstance(currentLocale).getSymbol();
+    }
+
+    private Locale retrieveLocale(){
+        Locale locale;
+        try{
+            locale = getResources().getConfiguration().locale;
+        }
+        catch(Exception e){
+            Log.w("CurrencyEditText", String.format("An error occurred while retrieving users device locale, using fallback locale '%s'", defaultLocale), e);
+            locale = defaultLocale;
+        }
+        return locale;
+    }
+
+    private Currency getCurrencyForLocale(Locale locale){
+        Currency currency;
+        try {
+            currency = Currency.getInstance(locale);
+        }
+        catch(IllegalArgumentException e){
+            try{
+                Log.w("CurrencyEditText", String.format("Error occurred while retrieving currentCurrency information with current locale '%s'. Trying default locale '%s'...", currentLocale, defaultLocale));
+                currency = Currency.getInstance(defaultLocale);
+            }
+            catch(Exception e1){
+                Log.e("CurrencyEditText", "Both device and configured default locales failed to report currentCurrency data. Defaulting to USD.");
+                currency = Currency.getInstance(Locale.US);
+            }
+        }
+        return currency;
+    }
+
+    protected void setRawValue(long value) {
+        rawValue = value;
     }
 }

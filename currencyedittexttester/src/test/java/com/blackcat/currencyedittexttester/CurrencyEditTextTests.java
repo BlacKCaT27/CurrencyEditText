@@ -18,6 +18,19 @@ import java.util.Locale;
 @SuppressLint("SetTextI18n")
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.LOLLIPOP)
+
+/**
+ * A collection of test cases for CurrencyEditText
+ * Note that since CurrencyEditText is a custom view,
+ * dependency injection in its typical form is somewhat difficult
+ * to implement without including 3rd party libraries which this
+ * project attempts to avoid. Therefore, aside from robolectric being
+ * used to mock the android APIs, the internal classes behind CurrencyEditText
+ * are NOT mocked.
+ *
+ * As such, these classes are technically more functional tests than unit tests,
+ * but are crucial all-the-same.
+ */
 public class CurrencyEditTextTests {
 
     private CurrencyEditText currencyEditText;

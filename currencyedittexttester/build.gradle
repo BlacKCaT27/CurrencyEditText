@@ -46,6 +46,10 @@ repositories {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':currencyedittext')
+
+    compile 'com.jakewharton:butterknife:8.7.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.3.2"
     testImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'

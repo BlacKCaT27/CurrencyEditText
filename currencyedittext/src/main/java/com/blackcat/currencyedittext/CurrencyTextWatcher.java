@@ -3,41 +3,22 @@ package com.blackcat.currencyedittext;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import java.util.Locale;
-
-@SuppressWarnings("unused")
 class CurrencyTextWatcher implements TextWatcher {
 
     private CurrencyEditText editText;
-    private Locale defaultLocale;
 
     private boolean ignoreIteration;
     private String lastGoodInput;
 
-    //Setting a max length because after this length, java represents doubles in scientific notation which breaks the formatter
-    private final int MAX_RAW_INPUT_LENGTH = 15;
-
-
     /**
      * A specialized TextWatcher designed specifically for converting EditText values to a pretty-print string currency value.
      * @param textBox The EditText box to which this TextWatcher is being applied.
      *                Used for replacing user-entered text with formatted text as well as handling cursor position for inputting monetary values
      */
-    public CurrencyTextWatcher(CurrencyEditText textBox){
-        this(textBox, Locale.US);
-    }
-
-    /**
-     * A specialized TextWatcher designed specifically for converting EditText values to a pretty-print string currency value.
-     * @param textBox The EditText box to which this TextWatcher is being applied.
-     *                Used for replacing user-entered text with formatted text as well as handling cursor position for inputting monetary values
-     * @param defaultLocale optional locale to default to in the event that the provided CurrencyEditText locale fails due to being unsupported
-     */
-    CurrencyTextWatcher(CurrencyEditText textBox, Locale defaultLocale){
+    CurrencyTextWatcher(CurrencyEditText textBox){
         editText = textBox;
         lastGoodInput = "";
         ignoreIteration = false;
-        this.defaultLocale = defaultLocale;
     }
 
     /**
@@ -55,12 +36,12 @@ class CurrencyTextWatcher implements TextWatcher {
             String textToDisplay;
 
             newText = (editText.areNegativeValuesAllowed()) ? newText.replaceAll("[^0-9/-]", "") : newText.replaceAll("[^0-9]", "");
-            if(!newText.equals("") && newText.length() < MAX_RAW_INPUT_LENGTH && !newText.equals("-")){
+            if(!newText.equals("") && !newText.equals("-")){
                 //Store a copy of the raw input to be retrieved later by getRawValue
                 editText.setRawValue(Long.valueOf(newText));
             }
             try{
-                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getCurrency(), editText.getLocale(), defaultLocale);
+                textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getLocale(), editText.getDefaultLocale(), editText.getDecimalDigits());
             }
             catch(IllegalArgumentException exception){
                 textToDisplay = lastGoodInput;
