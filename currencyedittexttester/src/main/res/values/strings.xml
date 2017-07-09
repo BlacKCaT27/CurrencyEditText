@@ -3,4 +3,18 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="random_test_tool_label"><u>Random Value Test Tool</u></string>
+    <string name="raw_value">Raw Value: </string>
+    <string name="string_value">String Value: </string>
+    <string name="refresh">Refresh</string>
+    <string name="default_currencyedittext_example"><u>Default CurrencyEditText Example</u></string>
+    <string name="raw_value_label">Raw value: </string>
+    <string name="formatted_value">Formatted value: </string>
+    <string name="currencyedittext_with_negative_values_enabled">CurrencyEditText with negative values enabled</string>
+    <string name="setlocale_currencyedittext_tool"><u>SetLocale CurrencyEditText Tool</u></string>
+    <string name="local_info">Locale Info:</string>
+    <string name="test_hint">TestHint</string>
+    <string name="set_decimal_digits_tool">Set Decimal Digits Tool</string>
+    <string name="setcurrency_currencyedittext_tool">SetCurrency CurrencyEditText Tool</string>
+    <string name="currency_info">Currency Info:</string>
 </resources>

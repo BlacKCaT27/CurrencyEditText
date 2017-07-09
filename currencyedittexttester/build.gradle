@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha5'
     }
 }
 
@@ -18,8 +18,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         release {
@@ -27,17 +25,39 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests{
+            includeAndroidResources = true
+        }
+    }
+    packagingOptions {
+        exclude 'licenses/javolution.license.TXT'
+    }
     sourceSets { main { java.srcDirs = ['src/main/java'] } }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 repositories {
     mavenCentral()
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':currencyedittext')
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.1"
-    compile 'com.android.support.test.espresso:espresso-core:2.2.2'
-    compile 'com.android.support.test:runner:0.5'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':currencyedittext')
+
+    compile 'com.jakewharton:butterknife:8.7.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.8.47"
+    testImplementation 'org.hamcrest:hamcrest-library:1.3'
+    testImplementation "org.assertj:assertj-core:2.6.0"
+    testImplementation "org.robolectric:robolectric:3.3.2"
+    testImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    testImplementation 'com.github.mikinw:DataSet:-SNAPSHOT'
+
+    testAnnotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
 }

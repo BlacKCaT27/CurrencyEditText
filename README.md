@@ -3,9 +3,9 @@ CurrencyEditText
 
 `CurrencyEditText` is an extension of Android's EditText view object. It is a module designed to provide ease-of-use when using an EditText field for gathering currency information from a user. 
 
-`CurrencyEditText` provides support for a large number of localities/currencies. USD/GPB/Euro are officially supported, though all currencies as supported by ISO 4217 should work.
+`CurrencyEditText` is designed to work with all ISO-3166 compliant locales (which *should* include all locales Android ships will).
 
-If you find that a certain currency is causing issues, please open an Issue in the Issue Tracker.
+If you find that a certain locale is causing issues, please open an Issue in the Issue Tracker.
 
 
 Getting Started
@@ -19,7 +19,7 @@ repositories {
 }
         
 dependencies{
-    compile 'com.github.blackcat27:library:1.4.4-SNAPSHOT'
+    compile 'com.github.blackcat27:library:2.0.0-SNAPSHOT'
 }
 ```
         
@@ -31,9 +31,11 @@ repositories{
 }
         
 dependencies {
-    compile 'com.github.BlacKCaT27:CurrencyEditText:v1.4.4'
+    compile 'com.github.BlacKCaT27:CurrencyEditText:v2.0.0'
 }
 ```
+
+Note: Users of the latest Android Studio Gradle plugin should migrate their build.gradle files to use 'implementation' instead of 'compile'.
 
 
 Using The Module
@@ -68,37 +70,26 @@ Depending on the users Locale and Language settings, the displayed text will aut
 
 ![Entered Text](/../screenshots/screenshots/CurrencyEditText_show_formatting_in_german.PNG?raw=true)
 
-
-Attributes
+Hints
 ===============
-
 By default, `CurrencyEditText` provides a 'hint' value for the text box. This default value is the Currency Code symbol for the users given Locale setting. This is 
 useful for debugging purposes, as well as provides clean and easy to understand guidance to the user. 
 
 If you'd prefer to set your own hint text, simply set the hint the same way you would for any other `EditText` field. You can do this either in your XML layout
-or in code.
-
-If you'd like to disable the default hint entirely, simply set the `DefaultHint` attribute in your XML layout to false:
-
-```xml
-<com.blackcat.currencyedittext.CurrencyEditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    CurrencyTextBox:enable_default_hint="false"
-    />
-```
-
-Alternatively, you can also call `setDefaultHintEnabled(false)` on the `CurrencyEditText` object in your code:
-
-```java
-CurrencyEditText tb = (CurrencyEditText) findViewById(R.id.test);
-tb.setDefaultHintEnabled(false);
-```
+or in code. To remove the hint entirely, set the hint to an empty string ("").
 
 
 
-Additionally, you can enable the input of negative numbers by setting the allow_negative_values attribute.
+Attributes
+===============
 
+
+
+By default, `CurrencyEditText` does not allow negative number input. This is due to the fact that by far the most common use-case for currency input involves transaction information, where the absolute value of the transaction is entered separately from declaring a deposit or withdrawl. 
+
+However, if you do need to support negative number input, you can enable it by setting the allow_negative_values attribute.
+
+In xml:
 ```xml
 <com.blackcat.currencyedittext.CurrencyEditText
         android:layout_width="match_parent"
@@ -107,13 +98,29 @@ Additionally, you can enable the input of negative numbers by setting the allow_
     />
 ```
 
-From java:
+In java:
 
 ```java
 CurrencyEditText tb = (CurrencyEditText) findViewById(R.id.test);
 tb.setAllowNegativeValues(true);
 ```
 
+You can also set the decimal digits position (see below) via xml or java
+
+In xml:
+```xml
+<com.blackcat.currencyedittext.CurrencyEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:decimal_digits="0"
+    />
+```
+
+In java:
+```java
+CurrencyEditText tb = (CurrencyEditText) findViewById(R.id.test);
+tb.setDecimalDigits(0);
+```
 Retrieving and Handling Input
 =============================
 
@@ -127,20 +134,16 @@ For example, if the text of the field is $13.37, this method will return a Long 
 It is the responsibility of the calling application to handle this value appropriately. Keep in mind that dividing this number to convert it to some other denomination
  could possibly result in floating point rounding errors, and should be done with great caution. 
  
-To help developers better facilitate the need to properly handle locale differences in currency, `CurrencyEditText` also provides a `getLocale()` method.
-
-This method is really just a convenience method for retrieving information about a users locale. It is functionally equivalent to pulling the locale from the users configuration on their device. It is recommended 
-that developers take a look at what the Locale and Currency classes offer in terms of denominations, decimal placement, string formatting, etc. 
-
+To assist with needing to perform work on locale-specific values after retrieval, `CurrencyEditText` provides the getLocale() method which returns the locale currently being used by that instance for its formatting. 
 
 Locales
 =======
 
 CurrencyEditText relies on a `Locale` object to properly format the given value. There are two `Locale` variables that are exposed via getters and setters on a given `CurrencyEditText` object: locale and defaultLocale.
 
-locale is the users default locale setting based upon their Android configuration settings. This value is editable by the user in Android settings. Note that this value *is not* always compatible with ISO-3166. This is used as the "happy path" variable.
+`locale` is the users default locale setting based upon their Android configuration settings. This value is editable by the user in Android settings, as well as via the `CurrencyEditText` API. Note that this value, when retrieved from the end-users device, *is not* always compatible with ISO-3166. This is used as the "happy path" variable, but due to the potential lack of ISO-3166 compliance, `CurrencyEditText` will fall back to `defaultLocale` in the event of an error.
  
-defaultLocale is a separate value which is treated as a fallback in the event that the provided locale value fails. This may occur due to that value not being part of the ISO-3166 standard. See `Java.util.Locale.getISOCountries()` for a list of supported values. Note that the list of supported values is hard-coded into each version of Java, therefore over time, the list of supported ISO's may change.
+`defaultLocale` is a separate value which is treated as a fallback in the event that the provided locale value fails. This may occur due to the `locale` value not being part of the ISO-3166 standard. See `Java.util.Locale.getISOCountries()` for a list of supported values. Note that the list of supported values is hard-coded into each version of Java, therefore over time, the list of supported ISO's may change.
 
 The default value for defaultLocale is `Locale.US`. Both this, and the locale value, can be overwritten using setters found on the `CurrencyEditText` object. Be very careful to ensure that should you override defaultLocale's value, you only use values supported by ISO-3166, or an IllegalArgumentException will be thrown by the formatter.
 
@@ -153,9 +156,9 @@ like to have formatted. It is expected that this value will be in the same forma
 ```java
 //rawVal contains "1000"
 CurrencyEditText cet = new CurrencyEditText();
-
+ 
 ... user inputs "$10.00"
-    
+ 
 //rawVal is 1000
 Long rawVal = cet.getRawValue();
 
@@ -166,7 +169,35 @@ String formattedVal = cet.formatCurrency(Long.toString(rawVal));
 
 String formattedVal = cet.formatCurrency(rawVal);
 ```
-        
+
+Decimal Digits
+===============
+
+By default, the `CurrencyEditText` text formatter will use the `locale` object to obtain information about the expected currency. This includes the location of the decimal separator for lower denominations (e.g. dollars vs. cents). If you would like to alter the decimal placement position, you can use the setDecimalDigits() method. This is very useful in some cases, for instance, if you only wish to show whole dollar amounts. 
+
+```java
+CurrencyEditText cet = new CurrencyEditText();
+ 
+... user inputs 1000
+ 
+//currentText is "$10.00"
+String currentText = cet.getText();
+
+cet.setDecimalDigits(0);
+
+//newText is "$1,000"
+String newText = cet.getText();
+
+```
+
+DecimalDigits can also be set in the XML layout if you don't want to obtain a java reference to the view.
+
+Note that the valid range of DecimalDigits is 0 - 340. Any value outside of that range will throw an `IllegalArgumentException`.
+
+
+Try it out
+===========
+This repo contains the currencyedittexttester project which provides a testing application to showcase `CurrencyEditText` functionality. You're encouraged to pull down and run the app to get a feel for how `CurrencyEditText` works.
 
 Why doesn't CurrencyEditText do \<x\>?
 ====================================
