@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+
 android {
     compileSdkVersion 26
     buildToolsVersion '26.0.0'
@@ -6,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 9
         targetSdkVersion 26
-        versionCode 144
-        versionName "1.4.4"
+        versionCode 200
+        versionName "2.0.0"
     }
 
     buildTypes {
@@ -20,6 +21,9 @@ android {
 }
 repositories {
     mavenCentral()
+    jcenter()
 }
 
+
 apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+
