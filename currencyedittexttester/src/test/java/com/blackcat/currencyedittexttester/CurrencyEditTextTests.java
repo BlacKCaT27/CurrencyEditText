@@ -234,6 +234,15 @@ public class CurrencyEditTextTests {
     }
 
     @Test
+    public void CanGetAndSetDefaultLocaleFieldTest(){
+        currencyEditText.setDefaultLocale(Locale.CANADA);
+
+        Locale result = currencyEditText.getDefaultLocale();
+
+        assertThat(result, is(equalTo(Locale.CANADA)));
+    }
+
+    @Test
     public void ConfigureViewForLocaleUsesDefaultLocaleForInvalidLocaleInputTest(){
         currencyEditText.configureViewForLocale(null);
 

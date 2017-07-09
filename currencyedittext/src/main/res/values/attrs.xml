@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="CurrencyEditText">
         <attr name="allow_negative_values" format="boolean" />
+        <attr name="decimal_digits" format="integer" />
     </declare-styleable>
 
 </resources>

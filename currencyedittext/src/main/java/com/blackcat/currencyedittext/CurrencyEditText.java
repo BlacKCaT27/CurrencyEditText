@@ -243,6 +243,7 @@ public class CurrencyEditText extends EditText {
         updateHint();
 
         this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
+        this.setDecimalDigits(array.getInteger(R.styleable.CurrencyEditText_decimal_digits, decimalDigits));
 
         array.recycle();
     }
