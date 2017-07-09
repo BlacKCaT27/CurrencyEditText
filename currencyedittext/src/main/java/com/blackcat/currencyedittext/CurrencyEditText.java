@@ -24,7 +24,7 @@ public class CurrencyEditText extends EditText {
     private CurrencyTextWatcher textWatcher;
     private String hintCache = null;
 
-    private Integer decimalDigits = null;
+    private int decimalDigits = 0;
 
     /*
     PUBLIC METHODS
@@ -71,7 +71,7 @@ public class CurrencyEditText extends EditText {
      *
      * @param value - The value to be converted, represented in the target currencies lowest denomination (e.g. pennies).
      */
-    public void SetValue(long value){
+    public void setValue(long value){
         String formattedText = format(value);
         setText(formattedText);
     }
@@ -118,12 +118,7 @@ public class CurrencyEditText extends EditText {
      * was overwritten by setDecimalDigits().
      */
     public int getDecimalDigits(){
-        if (decimalDigits != null){
-            return decimalDigits;
-        }
-        else{
-            return Currency.getInstance(currentLocale).getDefaultFractionDigits();
-        }
+        return decimalDigits;
     }
 
     /**
@@ -155,6 +150,9 @@ public class CurrencyEditText extends EditText {
      * This is the most 'fool proof' way of configuring a CurrencyEditText view when not
      * relying on the default implementation, and is the recommended approach for handling
      * locale/currency setup if you choose not to rely on the default behavior.
+     *
+     * Note that this method will set the decimalDigits field, potentially overriding
+     * values from previous setDecimalDigits calls.
      */
     public void configureViewForLocale(Locale locale){
         this.currentLocale = locale;
@@ -256,7 +254,20 @@ public class CurrencyEditText extends EditText {
     }
 
     private String getDefaultHintValue() {
-        return Currency.getInstance(currentLocale).getSymbol();
+        try {
+            return Currency.getInstance(currentLocale).getSymbol();
+        }
+        catch(Exception e){
+            Log.w("CurrencyEditText", String.format("An error occurred while getting currency symbol for hint using locale '%s', falling back to defaultLocale", currentLocale));
+            try{
+                return Currency.getInstance(defaultLocale).getSymbol();
+            }
+            catch(Exception e1){
+                Log.w("CurrencyEditText", String.format("An error occurred while getting currency symbol for hint using default locale '%s', falling back to USD", defaultLocale));
+                return Currency.getInstance(Locale.US).getSymbol();
+            }
+
+        }
     }
 
     private Locale retrieveLocale(){
@@ -276,9 +287,9 @@ public class CurrencyEditText extends EditText {
         try {
             currency = Currency.getInstance(locale);
         }
-        catch(IllegalArgumentException e){
+        catch(Exception e){
             try{
-                Log.w("CurrencyEditText", String.format("Error occurred while retrieving currentCurrency information with current locale '%s'. Trying default locale '%s'...", currentLocale, defaultLocale));
+                Log.w("CurrencyEditText", String.format("Error occurred while retrieving currency information for locale '%s'. Trying default locale '%s'...", currentLocale, defaultLocale));
                 currency = Currency.getInstance(defaultLocale);
             }
             catch(Exception e1){

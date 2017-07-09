@@ -31,7 +31,7 @@ public final class CurrencyTextFormatter {
             Currency currency = Currency.getInstance(locale);
             try {
                 currencyDecimalDigits = currency.getDefaultFractionDigits();
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 Log.e("CurrencyTextFormatter", "Illegal argument detected for currency: " + currency + ", using currency from defaultLocale: " + defaultLocale);
                 currencyDecimalDigits = Currency.getInstance(defaultLocale).getDefaultFractionDigits();
             }
@@ -40,10 +40,15 @@ public final class CurrencyTextFormatter {
         DecimalFormat currencyFormatter;
         try {
             currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(locale);
-        } catch (IllegalArgumentException e) {
-            Log.e("CurrencyTextFormatter", "Illegal argument detected for locale: " + locale + ", falling back to default value: " + defaultLocale);
-
-            currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(defaultLocale);
+        } catch (Exception e) {
+            try {
+                Log.e("CurrencyTextFormatter", "Error detected for locale: " + locale + ", falling back to default value: " + defaultLocale);
+                currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(defaultLocale);
+            }
+            catch(Exception e1){
+                Log.e("CurrencyTextFormatter", "Error detected for defaultLocale: " + defaultLocale + ", falling back to USD.");
+                currencyFormatter = (DecimalFormat) DecimalFormat.getCurrencyInstance(Locale.US);
+            }
         }
 
         //retain information about the negativity of the value before stripping all non-digits

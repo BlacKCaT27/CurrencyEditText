@@ -35,17 +35,6 @@
                 android:id="@+id/cet"
                 />
 
-            <!-- This is an invisible CET instance used for testing
-            via robolectric. Do not remove or modify. -->
-            <com.blackcat.currencyedittext.CurrencyEditText
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:allow_negative_values="true"
-                android:hint="@string/test_hint"
-                android:id="@+id/cet_for_testing"
-                android:visibility="invisible"
-                />
-
         </LinearLayout>
 
         <TextView
