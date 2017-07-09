@@ -194,6 +194,11 @@ DecimalDigits can also be set in the XML layout if you don't want to obtain a ja
 
 Note that the valid range of DecimalDigits is 0 - 340. Any value outside of that range will throw an `IllegalArgumentException`.
 
+
+Try it out
+===========
+This repo contains the currencyedittexttester project which provides a testing application to showcase `CurrencyEditText` functionality. You're encouraged to pull down and run the app to get a feel for how `CurrencyEditText` works.
+
 Why doesn't CurrencyEditText do \<x\>?
 ====================================
 
