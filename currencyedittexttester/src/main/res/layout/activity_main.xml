@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
@@ -10,83 +10,186 @@
               android:paddingBottom="@dimen/activity_vertical_margin"
               tools:context=".MainActivity">
 
-
-    <com.blackcat.currencyedittext.CurrencyEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:allow_negative_values="true"
-        android:id="@+id/cet"
-        />
-
-    <com.blackcat.currencyedittext.CurrencyEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:allow_negative_values="true"
-        android:id="@+id/cet_for_testing"
-        android:hint="TestHint"
-        android:visibility="invisible"
-        />
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        
-        <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Raw Value: "/>
-        
-        <TextView
-            android:layout_width="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/raw_val"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/default_currencyedittext_example"
+                android:textSize="16sp"/>
+
+            <!-- This is a "out of the box" instance of CurrencyEditText
+                using all default parameters. This instance will rely
+                on the devices locale settings to determine how to format
+                the input currency value. -->
+            <com.blackcat.currencyedittext.CurrencyEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cet"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="String Value: "/>
+            android:text="@string/random_test_tool_label"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/string_val"/>
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/raw_value_label"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_raw_val"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/formatted_value"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_formatted_val"/>
+            </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh"
+                android:id="@+id/button"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="5dp"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:id="@+id/button_reset"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/currencyedittext_with_negative_values_enabled"
+                android:textSize="16sp"/>
+
+            <!-- This instance has negative value input enabled (it's disabled by default) -->
+            <com.blackcat.currencyedittext.CurrencyEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:allow_negative_values="true"
+                android:id="@+id/cet_negative_values"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setlocale_currencyedittext_tool"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"/>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_testable_locales">
+            </Spinner>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/local_info"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/testable_locales_locale_info"/>
+
+            <com.blackcat.currencyedittext.CurrencyEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/testable_locales_cet"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/set_decimal_digits_tool"
+                android:textSize="16sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <com.blackcat.currencyedittext.CurrencyEditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/decimal_digits_tool_cet"
+                    android:layout_weight="3"
+                    android:layout_marginTop="50dp"
+                    />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/decimal_digits_tool_number_picker"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="30dp"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
     </LinearLayout>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh"
-        android:id="@+id/button"
-        android:clickable="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reset"
-        android:id="@+id/button_reset"
-        android:clickable="true" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_raw_val"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/et_formatted_val"/>
-    </LinearLayout>
-</LinearLayout>
+</ScrollView>

@@ -1,13 +1,14 @@
 apply plugin: 'com.android.library'
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 23
-        versionCode 144
-        versionName "1.4.4"
+        targetSdkVersion 26
+        versionCode 200
+        versionName "2.0.0"
     }
 
     buildTypes {
@@ -16,13 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test/java'] } }
+    sourceSets { main { java.srcDirs = ['src/main/java'] } }
 }
 repositories {
     mavenCentral()
+    jcenter()
 }
 
-dependencies {
-    testCompile 'junit:junit:4.12'
-}
+
 apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
+
