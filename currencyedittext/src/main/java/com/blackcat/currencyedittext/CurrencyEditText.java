@@ -11,7 +11,7 @@ import java.util.Currency;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
-public class CurrencyEditText extends EditText {
+public class CurrencyEditText extends EditText implements TextClearedWatcher {
 
     private Locale currentLocale;
 
@@ -303,5 +303,10 @@ public class CurrencyEditText extends EditText {
 
     protected void setRawValue(long value) {
         rawValue = value;
+    }
+
+    @Override
+    public void reset() {
+        valueInLowestDenom = 0L;
     }
 }

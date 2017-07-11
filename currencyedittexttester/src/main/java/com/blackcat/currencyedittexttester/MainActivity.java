@@ -37,6 +37,9 @@ public class MainActivity extends Activity {
     @BindView(R.id.button)
     Button refreshButton;
 
+    @BindView(R.id.button_reset)
+    Button resetButton;
+
     @BindView(R.id.et_raw_val)
     TextView et_raw_val;
 
@@ -92,6 +95,10 @@ public class MainActivity extends Activity {
         et_formatted_val.setText(result);
     }
 
+    @OnClick(R.id.button_reset)
+    void onRefreshClicked() {
+        resetButton.setText("");
+    }
 
     private void configureTestableLocalesTool(){
 

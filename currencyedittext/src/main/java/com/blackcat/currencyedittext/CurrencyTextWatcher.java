@@ -35,6 +35,13 @@ class CurrencyTextWatcher implements TextWatcher {
             String newText = editable.toString();
             String textToDisplay;
 
+            if (newText.length() < 1) {
+                lastGoodInput = "";
+                editText.setText("");
+                editText.reset();
+                return;
+            }
+
             newText = (editText.areNegativeValuesAllowed()) ? newText.replaceAll("[^0-9/-]", "") : newText.replaceAll("[^0-9]", "");
             if(!newText.equals("") && !newText.equals("-")){
                 //Store a copy of the raw input to be retrieved later by getRawValue
