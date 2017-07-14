@@ -170,9 +170,9 @@ public class CurrencyEditTextTests {
 
     @Test
     public void SetValueStoresProperValueTest(){
-        currencyEditText.setValue(100000);
+        currencyEditText.setValue(1000000);
         long result = currencyEditText.getRawValue();
-        assertThat(result, is(equalTo(100000L)));
+        assertThat(result, is(equalTo(1000000L)));
     }
 
     @Test
