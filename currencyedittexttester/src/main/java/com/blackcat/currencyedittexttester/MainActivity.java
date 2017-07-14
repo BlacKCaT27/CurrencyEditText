@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,9 +32,6 @@ public class MainActivity extends Activity {
 
     @BindView(R.id.cet)
     CurrencyEditText cet;
-
-    @BindView(R.id.button)
-    Button refreshButton;
 
     @BindView(R.id.et_raw_val)
     TextView et_raw_val;
@@ -70,6 +66,12 @@ public class MainActivity extends Activity {
         configureDecimalDigitsTool();
     }
 
+    @OnClick(R.id.cet_reset_button)
+    void onResetClicked(){
+        cet.setText("");
+    }
+
+    @SuppressWarnings("unused")
     @SuppressLint("SetTextI18n")
     @OnClick(R.id.button)
     void onRefreshClicked(){

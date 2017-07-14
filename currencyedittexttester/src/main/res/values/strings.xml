@@ -17,4 +17,5 @@
     <string name="set_decimal_digits_tool">Set Decimal Digits Tool</string>
     <string name="setcurrency_currencyedittext_tool">SetCurrency CurrencyEditText Tool</string>
     <string name="currency_info">Currency Info:</string>
+    <string name="reset_button_text">Reset</string>
 </resources>
