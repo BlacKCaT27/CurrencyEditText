@@ -19,7 +19,7 @@ repositories {
 }
         
 dependencies{
-    compile 'com.github.blackcat27:library:2.0.0-SNAPSHOT'
+    compile 'com.github.blackcat27:library:2.0.1-SNAPSHOT'
 }
 ```
         
@@ -31,7 +31,7 @@ repositories{
 }
         
 dependencies {
-    compile 'com.github.BlacKCaT27:CurrencyEditText:v2.0.0'
+    compile 'com.github.BlacKCaT27:CurrencyEditText:v2.0.1'
 }
 ```
 
