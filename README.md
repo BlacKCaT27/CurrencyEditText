@@ -31,7 +31,7 @@ repositories{
 }
         
 dependencies {
-    compile 'com.github.BlacKCaT27:CurrencyEditText:v2.0.1'
+    compile 'com.github.BlacKCaT27:CurrencyEditText:2.0.1'
 }
 ```
 
