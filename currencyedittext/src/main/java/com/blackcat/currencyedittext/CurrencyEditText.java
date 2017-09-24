@@ -182,8 +182,8 @@ public class CurrencyEditText extends EditText {
     }
 
     /**
-     * Pass in a value to have it formatted using the same rules used during data entry. 
-     * @param val A string which represents the value you'd like formatted. It is expected that this string will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as 
+     * Pass in a value to have it formatted using the same rules used during data entry.
+     * @param val A string which represents the value you'd like formatted. It is expected that this string will be in the same format returned by the getRawValue() method (i.e. a series of digits, such as
      *            "1000" to represent "$10.00"). Note that formatCurrency will take in ANY string, and will first strip any non-digit characters before working on that string. If the result of that processing
      *            reveals an empty string, or a string whose number of digits is greater than the max number of digits, an exception will be thrown.
      * @return A deviceLocale-formatted string of the passed in value, represented as currentCurrency.
@@ -201,7 +201,6 @@ public class CurrencyEditText extends EditText {
     public String formatCurrency(long rawVal){
         return format(rawVal);
     }
-
 
     /*
     PRIVATE HELPER METHODS

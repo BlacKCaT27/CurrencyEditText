@@ -262,4 +262,12 @@ public class CurrencyEditTextTests {
 
         assertThat(decimalDigits, is(equalTo(2)));
     }
+
+    @Test
+    public void CanEnterSeparatorCharactersWhenViewWasResetTest(){
+        currencyEditText.setText("");
+        currencyEditText.setText(".");
+
+        assertThat(currencyEditText.getText().toString(), is(equalTo("")));
+    }
 }
