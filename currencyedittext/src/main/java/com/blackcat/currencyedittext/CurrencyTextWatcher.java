@@ -65,7 +65,9 @@ class CurrencyTextWatcher implements TextWatcher {
 
 
             //Move the cursor to the end of the numerical value to enter the next number in a right-to-left fashion, like you would on a calculator.
-            editText.setSelection(cursorPosition);
+            if (currentText.length() >= cursorPosition){
+                editText.setSelection(cursorPosition);
+            }
 
         }
         else{
